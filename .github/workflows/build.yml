@@ -1,0 +1,214 @@
+name: Create komodo-periphery image including Mozilla SOPS and age
+
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - Dockerfile*
+      - .dockerignore
+      - .github/workflows/build.yml
+
+
+  schedule:
+    - cron: "00 3 * * *" # daily 03:00 UTC
+
+
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force build even if no upstream changes are detected"
+        required: false
+        default: "false"
+
+
+permissions:
+  contents: read
+  packages: write
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup crane
+        uses: imjasonh/setup-crane@v0.4
+
+
+      - name: Decide whether to build (base OR SOPS OR age) + build reason
+        id: decide
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          IMAGE="ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest"
+          BASE="ghcr.io/moghtech/komodo-periphery:latest"
+
+          GH_API="https://api.github.com"
+          AUTH_HEADER="Authorization: Bearer ${GH_TOKEN}"
+
+          # Always compute "selected" versions/digest for this run
+          BASE_DIGEST="$(crane digest "$BASE")"
+
+          SOPS_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/getsops/sops/releases/latest" | jq -r '.tag_name')"
+          AGE_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/FiloSottile/age/releases/latest" | jq -r '.tag_name')"
+
+          SOPS_VERSION="${SOPS_TAG#v}"
+          AGE_VERSION="${AGE_TAG#v}"
+
+          SOPS_RELEASE_URL="https://github.com/getsops/sops/releases/tag/${SOPS_TAG}"
+          AGE_RELEASE_URL="https://github.com/FiloSottile/age/releases/tag/${AGE_TAG}"
+
+          echo "base_digest=$BASE_DIGEST" >> "$GITHUB_OUTPUT"
+          echo "sops_version=$SOPS_VERSION" >> "$GITHUB_OUTPUT"
+          echo "age_version=$AGE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "sops_release_url=$SOPS_RELEASE_URL" >> "$GITHUB_OUTPUT"
+          echo "age_release_url=$AGE_RELEASE_URL" >> "$GITHUB_OUTPUT"
+
+          # Read "current" versions/digest from the published image (if it exists)
+          CURRENT_BASE_DIGEST=""
+          CURRENT_SOPS_VERSION=""
+          CURRENT_AGE_VERSION=""
+
+          if crane manifest "$IMAGE" >/dev/null 2>&1; then
+            cfg="$(crane config "$IMAGE")"
+            CURRENT_BASE_DIGEST="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.base.digest"] // ""')"
+            CURRENT_SOPS_VERSION="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.sops.version"] // ""')"
+            CURRENT_AGE_VERSION="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.age.version"] // ""')"
+          fi
+
+          # Keep these as outputs (handy for debugging / future reuse)
+          echo "current_base_digest=$CURRENT_BASE_DIGEST" >> "$GITHUB_OUTPUT"
+          echo "current_sops_version=$CURRENT_SOPS_VERSION" >> "$GITHUB_OUTPUT"
+          echo "current_age_version=$CURRENT_AGE_VERSION" >> "$GITHUB_OUTPUT"
+
+          # Determine forced build conditions
+          FORCED="false"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            FORCED="true"
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            FORCED="true"
+          fi
+
+          # Detect upstream changes
+          CHANGED="false"
+          reasons=()
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "$FORCED" = "true" ]; then
+              reasons+=("Manual trigger (forced build)")
+            else
+              reasons+=("Manual trigger")
+            fi
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            reasons+=("Repository push (Dockerfile/workflow change possible)")
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            reasons+=("Scheduled upstream check")
+          fi
+
+          if [ -z "$CURRENT_BASE_DIGEST" ] || [ "$CURRENT_BASE_DIGEST" != "$BASE_DIGEST" ]; then
+            CHANGED="true"
+            reasons+=("komodo-periphery base changed: ${CURRENT_BASE_DIGEST:-<none>} -> ${BASE_DIGEST}")
+          fi
+
+          if [ "$CURRENT_SOPS_VERSION" != "$SOPS_VERSION" ]; then
+            CHANGED="true"
+            reasons+=("SOPS updated: ${CURRENT_SOPS_VERSION:-<none>} -> ${SOPS_VERSION} ([release notes](${SOPS_RELEASE_URL}))")
+          fi
+
+          if [ "$CURRENT_AGE_VERSION" != "$AGE_VERSION" ]; then
+            CHANGED="true"
+            reasons+=("age updated: ${CURRENT_AGE_VERSION:-<none>} -> ${AGE_VERSION} ([release notes](${AGE_RELEASE_URL}))")
+          fi
+
+          # Final decision
+          if [ "$FORCED" = "true" ] || [ "$CHANGED" = "true" ]; then
+            echo "do_build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "do_build=false" >> "$GITHUB_OUTPUT"
+            reasons+=("No upstream changes detected (base/SOPS/age unchanged)")
+          fi
+
+          # Single markdown blob for Job Summary
+          {
+            echo "reasons_md<<EOF"
+            echo "### Publish reason"
+            printf '%s' "${reasons[@]}" | sed 's/^/- /'
+            echo ""
+            echo "### Selected versions (this run)"
+            echo "- komodo-periphery digest: ${BASE_DIGEST}"
+            echo "- SOPS: ${SOPS_VERSION} (${SOPS_RELEASE_URL})"
+            echo "- age: ${AGE_VERSION} (${AGE_RELEASE_URL})"
+            echo ""
+            echo "### Current versions (published image)"
+            echo "- komodo-periphery digest: ${CURRENT_BASE_DIGEST:-<none>}"
+            echo "- SOPS: ${CURRENT_SOPS_VERSION:-<none>}"
+            echo "- age: ${CURRENT_AGE_VERSION:-<none>}"
+            echo " "
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+
+      - name: Metadata
+        if: steps.decide.outputs.do_build == 'true'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age
+          tags: |
+            type=raw,value=latest
+            type=schedule,pattern={{date 'YYYYMMDD'}}
+
+
+      - name: Build and push
+        if: steps.decide.outputs.do_build == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            org.opencontainers.image.base.name=ghcr.io/moghtech/komodo-periphery:latest
+            org.opencontainers.image.base.digest=${{ steps.decide.outputs.base_digest }}
+            org.opencontainers.image.sops.version=${{ steps.decide.outputs.sops_version }}
+            org.opencontainers.image.age.version=${{ steps.decide.outputs.age_version }}
+            org.opencontainers.image.description=Komodo periphery with SOPS+age (auto rebuild on upstream updates)
+          build-args: |
+            BASE_DIGEST=${{ steps.decide.outputs.base_digest }}
+            SOPS_VERSION=${{ steps.decide.outputs.sops_version }}
+            AGE_VERSION=${{ steps.decide.outputs.age_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Write build summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            printf '%s' "${{ steps.decide.outputs.reasons_md }}"
+            printf '### Image'
+            printf ' '
+            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`'
+          } >> "$GITHUB_STEP_SUMMARY"
