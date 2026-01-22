@@ -152,7 +152,7 @@ jobs:
           {
             echo "reasons_md<<EOF"
             echo "### Publish reason"
-            printf '%s' "${reasons[@]}" | sed 's/^/- /'
+            printf '%s\n' "${reasons[@]}" | sed 's/^/- /'
             echo ""
             echo "### Selected versions (this run)"
             echo "- komodo-periphery digest: ${BASE_DIGEST}"
