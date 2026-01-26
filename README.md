@@ -6,7 +6,7 @@
 > Custom **[Komodo](https://github.com/moghtech/komodo) Periphery** image with **[SOPS](https://github.com/getsops/sops)** and **[age](https://github.com/FiloSottile/age)**, automatically rebuilt when upstream components change.
 
 This repository builds and publishes a Docker image based on
-`ghcr.io/moghtech/komodo-periphery`, with **Mozilla SOPS** and **age**
+`ghcr.io/moghtech/komodo-periphery:latest`, with **Mozilla SOPS** and **age**
 preinstalled.
 
 The CI rebuilds the image **only when necessary** and writes a Job Summary that
@@ -52,8 +52,7 @@ and keeps it up to date automatically.
     - `sops`
     - `age`
     - `age-keygen`
-- Publishes the image to **GitHub Container Registry (GHCR)** with  or
-    `ghcr.io/smoochy/komodo-periphery-sops-age:latest` or
+- Publishes the image to **GitHub Container Registry (GHCR)** with `ghcr.io/smoochy/komodo-periphery-sops-age:latest` or
     `ghcr.io/smoochy/komodo-periphery-sops-age:<komodo-version>` like
     `ghcr.io/smoochy/komodo-periphery-sops-age:latest:1.19.5`. You can find the images
   [at this link](https://github.com/smoochy/komodo-periphery-sops-age/pkgs/container/komodo-periphery-sops-age).
