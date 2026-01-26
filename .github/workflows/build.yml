@@ -233,11 +233,14 @@ jobs:
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.base.name=ghcr.io/moghtech/komodo-periphery:latest
             org.opencontainers.image.base.tag=${{ steps.decide.outputs.periphery_tag }}
+            org.opencontainers.image.base.digest=${{ steps.decide.outputs.base_digest }}
+            org.opencontainers.image.base.version=${{ steps.decide.outputs.periphery_tag }}
             org.opencontainers.image.sops.version=${{ steps.decide.outputs.sops_version }}
             org.opencontainers.image.age.version=${{ steps.decide.outputs.age_version }}
             org.opencontainers.image.description=Komodo periphery with SOPS+age (auto rebuild on upstream updates)
           build-args: |
             BASE_DIGEST=${{ steps.decide.outputs.base_digest }}
+            BASE_VERSION=${{ steps.decide.outputs.periphery_tag }}
             SOPS_VERSION=${{ steps.decide.outputs.sops_version }}
             AGE_VERSION=${{ steps.decide.outputs.age_version }}
           cache-from: type=gha

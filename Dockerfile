@@ -18,6 +18,7 @@ ARG TARGETARCH
 ARG SOPS_VERSION
 ARG AGE_VERSION
 ARG BASE_DIGEST=""
+ARG BASE_VERSION=""
 
 RUN set -eux; \
     arch="${TARGETARCH:-amd64}"; \
@@ -42,6 +43,7 @@ RUN set -eux; \
     age --version
 
 LABEL org.opencontainers.image.base.name="ghcr.io/moghtech/komodo-periphery:latest"
+LABEL org.opencontainers.image.base.version="${BASE_VERSION}"
 LABEL org.opencontainers.image.base.digest="${BASE_DIGEST}"
 LABEL org.opencontainers.image.sops.version="${SOPS_VERSION}"
 LABEL org.opencontainers.image.age.version="${AGE_VERSION}"
