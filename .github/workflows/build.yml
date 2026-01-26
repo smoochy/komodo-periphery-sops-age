@@ -34,14 +34,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
-
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -49,7 +46,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Setup crane
         uses: imjasonh/setup-crane@v0.4
@@ -72,26 +68,43 @@ jobs:
           # Always compute "selected" versions/digest for this run
           BASE_DIGEST="$(crane digest "$BASE")"
 
-          # Try to read a version label from the base image config
+          # Determine periphery x.y.z tag that matches BASE (latest) digest
           BASE_CFG="$(crane config "$BASE")"
 
-          BASE_VERSION_RAW="$(echo "$BASE_CFG" | jq -r '.config.Labels["org.opencontainers.image.version"] // .config.Labels["org.label-schema.version"] // ""')"
+          # Try common version labels from the base image
+          PERIPHERY_TAG_RAW="$(echo "$BASE_CFG" | jq -r '.config.Labels["org.opencontainers.image.version"] // .config.Labels["org.label-schema.version"] // ""')"
+          PERIPHERY_TAG="${PERIPHERY_TAG_RAW#v}"
 
-          # Normalize (drop leading v) and sanitize for Docker tags
-          BASE_VERSION="${BASE_VERSION_RAW#v}"
-          BASE_VERSION_SANITIZED="$(echo "$BASE_VERSION" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9_.-' '-')"
-          BASE_VERSION_SANITIZED="$(echo "$BASE_VERSION_SANITIZED" | sed 's/^-//; s/-$//')"
+          is_semver() { [[ "$1" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; }
 
-          # Fallback if base image doesn't expose a version label
-          if [ -z "$BASE_VERSION_SANITIZED" ]; then
-            short="${BASE_DIGEST#sha256:}"
-            short="${short:0:12}"
-            BASE_VERSION_SANITIZED="sha-${short}"
+          if ! is_semver "$PERIPHERY_TAG"; then
+            PERIPHERY_TAG=""
+
+            # Fallback: scan tags, keep only x.y.z, compare digest
+            # NOTE: This can take a bit if there are many tags, but is reliable.
+            mapfile -t tags < <(crane ls ghcr.io/moghtech/komodo-periphery | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' || true)
+
+            # Prefer newest first by version sort
+            if [ "${#tags[@]}" -gt 0 ]; then
+              IFS=$'\n' tags_sorted=($(printf '%s\n' "${tags[@]}" | sort -V -r))
+              unset IFS
+
+              for t in "${tags_sorted[@]}"; do
+                d="$(crane digest "ghcr.io/moghtech/komodo-periphery:${t}")"
+                if [ "$d" = "$BASE_DIGEST" ]; then
+                  PERIPHERY_TAG="$t"
+                  break
+                fi
+              done
+            fi
           fi
 
-          echo "periphery_version_raw=$BASE_VERSION_RAW" >> "$GITHUB_OUTPUT"
-          echo "periphery_version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
-          echo "periphery_version_tag=$BASE_VERSION_SANITIZED" >> "$GITHUB_OUTPUT"
+          if [ -z "$PERIPHERY_TAG" ]; then
+            echo "ERROR: Could not resolve periphery x.y.z tag for digest ${BASE_DIGEST}" >&2
+            exit 1
+          fi
+
+          echo "periphery_tag=$PERIPHERY_TAG" >> "$GITHUB_OUTPUT"
 
           SOPS_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/getsops/sops/releases/latest" | jq -r '.tag_name')"
           AGE_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/FiloSottile/age/releases/latest" | jq -r '.tag_name')"
@@ -181,14 +194,16 @@ jobs:
             echo ""
             echo "### Selected versions (this run)"
             echo "- komodo-periphery digest: ${BASE_DIGEST}"
+            echo "- komodo-periphery tag: ${PERIPHERY_TAG}"
             echo "- SOPS: ${SOPS_VERSION} (${SOPS_RELEASE_URL})"
             echo "- age: ${AGE_VERSION} (${AGE_RELEASE_URL})"
             echo ""
             echo "### Current versions (published image)"
             echo "- komodo-periphery digest: ${CURRENT_BASE_DIGEST:-<none>}"
+            echo "- komodo-periphery tag: ${PERIPHERY_TAG}"
             echo "- SOPS: ${CURRENT_SOPS_VERSION:-<none>}"
             echo "- age: ${CURRENT_AGE_VERSION:-<none>}"
-            echo " "
+            echo ""
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
@@ -201,7 +216,7 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age
           tags: |
             type=raw,value=latest
-            type=raw,value=periphery-${{ steps.decide.outputs.periphery_version_tag }}
+            type=raw,value=${{ steps.decide.outputs.periphery_tag }}
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
 
@@ -217,8 +232,7 @@ jobs:
           labels: |
             ${{ steps.meta.outputs.labels }}
             org.opencontainers.image.base.name=ghcr.io/moghtech/komodo-periphery:latest
-            org.opencontainers.image.base.digest=${{ steps.decide.outputs.base_digest }}
-            org.opencontainers.image.base.version=${{ steps.decide.outputs.periphery_version_tag }}
+            org.opencontainers.image.base.tag=${{ steps.decide.outputs.periphery_tag }}
             org.opencontainers.image.sops.version=${{ steps.decide.outputs.sops_version }}
             org.opencontainers.image.age.version=${{ steps.decide.outputs.age_version }}
             org.opencontainers.image.description=Komodo periphery with SOPS+age (auto rebuild on upstream updates)
@@ -229,13 +243,15 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+
       - name: Write build summary
         if: always()
         shell: bash
         run: |
           {
-            printf '%s' "${{ steps.decide.outputs.reasons_md }}"
-            printf '### Image'
-            printf ' '
-            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`'
+            printf '%s\n' "${{ steps.decide.outputs.reasons_md }}"
+            printf '\n### Image\n'
+            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
+            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
           } >> "$GITHUB_STEP_SUMMARY"
+

@@ -3,7 +3,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![CI](https://github.com/smoochy/komodo-periphery-sops-age/actions/workflows/build.yml/badge.svg)](https://github.com/smoochy/komodo-periphery-sops-age/actions)
 
-> Custom Komodo Periphery image with **[SOPS](https://github.com/getsops/sops)** and **[age](https://github.com/FiloSottile/age)**, automatically rebuilt when upstream components change.
+> Custom **[Komodo](https://github.com/moghtech/komodo) Periphery** image with **[SOPS](https://github.com/getsops/sops)** and **[age](https://github.com/FiloSottile/age)**, automatically rebuilt when upstream components change.
 
 This repository builds and publishes a Docker image based on
 `ghcr.io/moghtech/komodo-periphery:latest`, with **Mozilla SOPS** and **age**
@@ -25,6 +25,7 @@ explains *why* a build happened (including links to upstream release notes).
   - [GitHub Actions workflow](#github-actions-workflow)
   - [Job Summary](#job-summary)
   - [Image metadata](#image-metadata)
+  - [Image tags](#image-tags)
   - [Usage](#usage)
   - [Security](#security)
   - [Maintainers](#maintainers)
@@ -132,9 +133,22 @@ This makes it obvious *why* a new image was published and what changed.
 Each published image includes OCI labels used for traceability and change
 detection, for example:
 
+- `org.opencontainers.image.base.tag`
 - `org.opencontainers.image.base.digest`
 - `org.opencontainers.image.sops.version`
 - `org.opencontainers.image.age.version`
+
+---
+
+## Image tags
+
+This image is published with:
+
+- `latest`
+  - Always points to the newest build.
+- `<x.y.z>`
+  - Matches the upstream Komodo Periphery version tag that `ghcr.io/moghtech/komodo-periphery:x.y.z` points to.
+  - Useful for reproducible deployments pinned to a specific Komodo release.
 
 ---
 
@@ -146,6 +160,14 @@ Example `docker-compose.yml`:
 services:
   periphery:
     image: ghcr.io/smoochy/komodo-periphery-sops-age:latest
+```
+
+or
+
+```yaml
+services:
+  periphery:
+    image: ghcr.io/smoochy/komodo-periphery-sops-age:2.6.1
 ```
 
 If the image is private, authenticate once on the host:
