@@ -47,13 +47,15 @@ and keeps it up to date automatically.
 ## What this repository does
 
 - Builds a custom Docker image:
-  - Base: `ghcr.io/moghtech/komodo-periphery:latest` or
-    `ghcr.io/moghtech/komodo-periphery:<komodo-version>` like `ghcr.io/moghtech/komodo-periphery:1.19.5`
+  - Base: `ghcr.io/moghtech/komodo-periphery:latest`
   - Adds:
     - `sops`
     - `age`
     - `age-keygen`
-- Publishes the image to **GitHub Container Registry (GHCR)**. You can find the images
+- Publishes the image to **GitHub Container Registry (GHCR)** with  or
+    `ghcr.io/smoochy/komodo-periphery-sops-age:latest` or
+    `ghcr.io/smoochy/komodo-periphery-sops-age:<komodo-version>` like
+    `ghcr.io/smoochy/komodo-periphery-sops-age:latest:1.19.5`. You can find the images
   [at this link](https://github.com/smoochy/komodo-periphery-sops-age/pkgs/container/komodo-periphery-sops-age).
 - Tracks upstream updates and rebuilds only when needed.
 
