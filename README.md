@@ -3,6 +3,8 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![CI](https://github.com/smoochy/komodo-periphery-sops-age/actions/workflows/build.yml/badge.svg)](https://github.com/smoochy/komodo-periphery-sops-age/actions)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/smoochy)
+
 > Custom **[Komodo](https://github.com/moghtech/komodo) Periphery** image with **[SOPS](https://github.com/getsops/sops)** and **[age](https://github.com/FiloSottile/age)**, automatically rebuilt when upstream components change.
 
 This repository builds and publishes a Docker image based on
@@ -10,7 +12,7 @@ This repository builds and publishes a Docker image based on
 preinstalled.
 
 The CI rebuilds the image **only when necessary** and writes a Job Summary that
-explains *why* a build happened (including links to upstream release notes).
+explains _why_ a build happened (including links to upstream release notes).
 
 ---
 
@@ -53,8 +55,8 @@ and keeps it up to date automatically.
     - `age`
     - `age-keygen`
 - Publishes the image to **GitHub Container Registry (GHCR)** with `ghcr.io/smoochy/komodo-periphery-sops-age:latest` or
-    `ghcr.io/smoochy/komodo-periphery-sops-age:<komodo-version>` like
-    `ghcr.io/smoochy/komodo-periphery-sops-age:latest:1.19.5`. You can find the images
+  `ghcr.io/smoochy/komodo-periphery-sops-age:<komodo-version>` like
+  `ghcr.io/smoochy/komodo-periphery-sops-age:latest:1.19.5`. You can find the images
   [at this link](https://github.com/smoochy/komodo-periphery-sops-age/pkgs/container/komodo-periphery-sops-age).
 - Tracks upstream updates and rebuilds only when needed.
 
@@ -64,7 +66,7 @@ and keeps it up to date automatically.
 
 The workflow is triggered in three ways:
 
-1. **Push to `main`**, but *only* when one of these files changes:
+1. **Push to `main`**, but _only_ when one of these files changes:
    - `Dockerfile*`
    - `.dockerignore`
    - `.github/workflows/build.yml`
@@ -127,7 +129,7 @@ Every workflow run writes a summary that includes:
 - The **selected** versions for this run
 - The **current** versions from the already published image
 
-This makes it obvious *why* a new image was published and what changed.
+This makes it obvious _why_ a new image was published and what changed.
 
 ---
 
