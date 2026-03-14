@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -49,6 +49,23 @@ jobs:
 
       - name: Setup crane
         uses: imjasonh/setup-crane@v0.4
+
+      - name: Determine optional registry targets
+        id: registries
+        shell: bash
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -n "${DOCKERHUB_USERNAME:-}" ] && [ -n "${DOCKERHUB_TOKEN:-}" ]; then
+            echo "dockerhub_enabled=true" >> "$GITHUB_OUTPUT"
+            echo "dockerhub_image=${DOCKERHUB_USERNAME}/komodo-periphery-sops-age" >> "$GITHUB_OUTPUT"
+          else
+            echo "dockerhub_enabled=false" >> "$GITHUB_OUTPUT"
+            echo "dockerhub_image=" >> "$GITHUB_OUTPUT"
+          fi
 
 
       - name: Decide whether to build (base OR SOPS OR age) + build reason
@@ -217,7 +234,6 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ steps.decide.outputs.periphery_tag }}
-            type=schedule,pattern={{date 'YYYYMMDD'}}
 
 
       - name: Build and push
@@ -246,6 +262,29 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Login to Docker Hub
+        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Mirror image to Docker Hub
+        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        id: dockerhub_mirror
+        shell: bash
+        env:
+          DOCKERHUB_IMAGE: ${{ steps.registries.outputs.dockerhub_image }}
+          PERIPHERY_TAG: ${{ steps.decide.outputs.periphery_tag }}
+        run: |
+          set -euo pipefail
+
+          src_base="ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age"
+          dst_base="${DOCKERHUB_IMAGE}"
+
+          for tag in latest "${PERIPHERY_TAG}"; do
+            crane copy "${src_base}:${tag}" "${dst_base}:${tag}"
+          done
 
       - name: Write build summary
         if: always()
@@ -256,5 +295,16 @@ jobs:
             printf '\n### Image\n'
             printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
             printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            printf '\n### Docker Hub Mirror\n'
+            if [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
+              printf -- '- Skipped: set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable Docker Hub publishing.\n'
+            elif [ "${{ steps.decide.outputs.do_build }}" != "true" ]; then
+              printf -- '- No image build was required, so Docker Hub was not updated.\n'
+            elif [ "${{ steps.dockerhub_mirror.outcome }}" = "success" ]; then
+              printf -- '- `smoochy84/komodo-periphery-sops-age:latest`\n'
+              printf -- '- `smoochy84/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            else
+              printf -- '- Mirror was attempted but did not complete successfully.\n'
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 

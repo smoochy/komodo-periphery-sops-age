@@ -1,0 +1,57 @@
+name: Sync Docker Hub description
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - README.md
+      - README.dockerhub.md
+      - .github/workflows/sync_dockerhub_description.yml
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Check Docker Hub secrets
+        id: dockerhub
+        shell: bash
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -n "${DOCKERHUB_USERNAME:-}" ] && [ -n "${DOCKERHUB_TOKEN:-}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Docker Hub description
+        if: steps.dockerhub.outputs.enabled == 'true'
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: smoochy84/komodo-periphery-sops-age
+          short-description: Komodo Periphery image with SOPS and age, rebuilt on upstream changes
+          readme-filepath: ./README.dockerhub.md
+          enable-url-completion: true
+
+      - name: Write summary
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ steps.dockerhub.outputs.enabled }}" = "true" ]; then
+            printf 'Docker Hub description sync completed for `smoochy84/komodo-periphery-sops-age`.\n' >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf 'Docker Hub description sync skipped. Set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable it.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
