@@ -9,6 +9,13 @@ on:
       - .dockerignore
       - .github/workflows/build.yml
 
+  pull_request:
+    branches: ["main"]
+    paths:
+      - Dockerfile*
+      - .dockerignore
+      - .github/workflows/build.yml
+
 
   schedule:
     - cron: "00 3 * * *" # daily 03:00 UTC
@@ -41,6 +48,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -160,6 +168,9 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ]; then
             FORCED="true"
           fi
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            FORCED="true"
+          fi
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
             FORCED="true"
           fi
@@ -174,6 +185,8 @@ jobs:
             else
               reasons+=("Manual trigger")
             fi
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            reasons+=("Pull request validation")
           elif [ "${{ github.event_name }}" = "push" ]; then
             reasons+=("Repository push (Dockerfile/workflow change possible)")
           elif [ "${{ github.event_name }}" = "schedule" ]; then
@@ -243,7 +256,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
@@ -263,14 +276,14 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Login to Docker Hub
-        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        if: steps.decide.outputs.do_build == 'true' && github.event_name != 'pull_request' && steps.registries.outputs.dockerhub_enabled == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Mirror image to Docker Hub
-        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        if: steps.decide.outputs.do_build == 'true' && github.event_name != 'pull_request' && steps.registries.outputs.dockerhub_enabled == 'true'
         id: dockerhub_mirror
         shell: bash
         env:
@@ -293,10 +306,16 @@ jobs:
           {
             printf '%s\n' "${{ steps.decide.outputs.reasons_md }}"
             printf '\n### Image\n'
-            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
-            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              printf -- '- Validation build only. No image was pushed.\n'
+            else
+              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
+              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            fi
             printf '\n### Docker Hub Mirror\n'
-            if [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              printf -- '- Skipped for pull request validation.\n'
+            elif [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
               printf -- '- Skipped: set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable Docker Hub publishing.\n'
             elif [ "${{ steps.decide.outputs.do_build }}" != "true" ]; then
               printf -- '- No image build was required, so Docker Hub was not updated.\n'
@@ -307,4 +326,3 @@ jobs:
               printf -- '- Mirror was attempted but did not complete successfully.\n'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-
