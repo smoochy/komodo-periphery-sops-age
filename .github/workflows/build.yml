@@ -40,6 +40,50 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Classify local changes
+        id: local_changes
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+          PUSH_SHA: ${{ github.sha }}
+          WORKFLOW_PATH: .github/workflows/build.yml
+        run: |
+          set -euo pipefail
+
+          image_inputs_changed=false
+          workflow_changed=false
+          changed_files=""
+          compare_from=""
+          compare_to=""
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            compare_from="$PR_BASE_SHA"
+            compare_to="$PR_HEAD_SHA"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            compare_from="$PUSH_BEFORE_SHA"
+            compare_to="$PUSH_SHA"
+          fi
+
+          if [ -n "$compare_from" ] && [ -n "$compare_to" ] && [ "$compare_from" != "0000000000000000000000000000000000000000" ]; then
+            changed_files="$(git diff --name-only "$compare_from" "$compare_to" || true)"
+          fi
+
+          if printf '%s\n' "$changed_files" | grep -Eq '^(Dockerfile[^/]*|\.dockerignore)$'; then
+            image_inputs_changed=true
+          fi
+
+          if printf '%s\n' "$changed_files" | grep -Fxq "$WORKFLOW_PATH"; then
+            workflow_changed=true
+          fi
+
+          echo "image_inputs_changed=$image_inputs_changed" >> "$GITHUB_OUTPUT"
+          echo "workflow_changed=$workflow_changed" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -165,13 +209,13 @@ jobs:
 
           # Determine forced build conditions
           FORCED="false"
-          if [ "${{ github.event_name }}" = "push" ]; then
-            FORCED="true"
-          fi
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            FORCED="true"
-          fi
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            FORCED="true"
+          fi
+          if [ "${{ github.event_name }}" = "pull_request" ] && { [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] || [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; }; then
+            FORCED="true"
+          fi
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
             FORCED="true"
           fi
 
@@ -186,9 +230,25 @@ jobs:
               reasons+=("Manual trigger")
             fi
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            reasons+=("Pull request validation")
+            if [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] && [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for image input and workflow changes")
+            elif [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for local image input changes")
+            elif [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for workflow changes")
+            else
+              reasons+=("Pull request validation")
+            fi
           elif [ "${{ github.event_name }}" = "push" ]; then
-            reasons+=("Repository push (Dockerfile/workflow change possible)")
+            if [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] && [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Repository push changed local image inputs and workflow")
+            elif [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
+              reasons+=("Repository push changed local image inputs")
+            elif [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Workflow changed, but no image input changed; publish skipped unless upstream changed")
+            else
+              reasons+=("Repository push")
+            fi
           elif [ "${{ github.event_name }}" = "schedule" ]; then
             reasons+=("Scheduled upstream check")
           fi
