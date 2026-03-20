@@ -9,6 +9,13 @@ on:
       - .dockerignore
       - .github/workflows/build.yml
 
+  pull_request:
+    branches: ["main"]
+    paths:
+      - Dockerfile*
+      - .dockerignore
+      - .github/workflows/build.yml
+
 
   schedule:
     - cron: "00 3 * * *" # daily 03:00 UTC
@@ -33,6 +40,50 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Classify local changes
+        id: local_changes
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+          PUSH_SHA: ${{ github.sha }}
+          WORKFLOW_PATH: .github/workflows/build.yml
+        run: |
+          set -euo pipefail
+
+          image_inputs_changed=false
+          workflow_changed=false
+          changed_files=""
+          compare_from=""
+          compare_to=""
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            compare_from="$PR_BASE_SHA"
+            compare_to="$PR_HEAD_SHA"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            compare_from="$PUSH_BEFORE_SHA"
+            compare_to="$PUSH_SHA"
+          fi
+
+          if [ -n "$compare_from" ] && [ -n "$compare_to" ] && [ "$compare_from" != "0000000000000000000000000000000000000000" ]; then
+            changed_files="$(git diff --name-only "$compare_from" "$compare_to" || true)"
+          fi
+
+          if printf '%s\n' "$changed_files" | grep -Eq '^(Dockerfile[^/]*|\.dockerignore)$'; then
+            image_inputs_changed=true
+          fi
+
+          if printf '%s\n' "$changed_files" | grep -Fxq "$WORKFLOW_PATH"; then
+            workflow_changed=true
+          fi
+
+          echo "image_inputs_changed=$image_inputs_changed" >> "$GITHUB_OUTPUT"
+          echo "workflow_changed=$workflow_changed" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -41,6 +92,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -157,10 +209,13 @@ jobs:
 
           # Determine forced build conditions
           FORCED="false"
-          if [ "${{ github.event_name }}" = "push" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
             FORCED="true"
           fi
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+          if [ "${{ github.event_name }}" = "pull_request" ] && { [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] || [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; }; then
+            FORCED="true"
+          fi
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
             FORCED="true"
           fi
 
@@ -174,8 +229,26 @@ jobs:
             else
               reasons+=("Manual trigger")
             fi
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            if [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] && [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for image input and workflow changes")
+            elif [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for local image input changes")
+            elif [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Pull request validation for workflow changes")
+            else
+              reasons+=("Pull request validation")
+            fi
           elif [ "${{ github.event_name }}" = "push" ]; then
-            reasons+=("Repository push (Dockerfile/workflow change possible)")
+            if [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ] && [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Repository push changed local image inputs and workflow")
+            elif [ "${{ steps.local_changes.outputs.image_inputs_changed }}" = "true" ]; then
+              reasons+=("Repository push changed local image inputs")
+            elif [ "${{ steps.local_changes.outputs.workflow_changed }}" = "true" ]; then
+              reasons+=("Workflow changed, but no image input changed; publish skipped unless upstream changed")
+            else
+              reasons+=("Repository push")
+            fi
           elif [ "${{ github.event_name }}" = "schedule" ]; then
             reasons+=("Scheduled upstream check")
           fi
@@ -243,7 +316,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
@@ -263,14 +336,14 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Login to Docker Hub
-        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        if: steps.decide.outputs.do_build == 'true' && github.event_name != 'pull_request' && steps.registries.outputs.dockerhub_enabled == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Mirror image to Docker Hub
-        if: steps.decide.outputs.do_build == 'true' && steps.registries.outputs.dockerhub_enabled == 'true'
+        if: steps.decide.outputs.do_build == 'true' && github.event_name != 'pull_request' && steps.registries.outputs.dockerhub_enabled == 'true'
         id: dockerhub_mirror
         shell: bash
         env:
@@ -293,10 +366,16 @@ jobs:
           {
             printf '%s\n' "${{ steps.decide.outputs.reasons_md }}"
             printf '\n### Image\n'
-            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
-            printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              printf -- '- Validation build only. No image was pushed.\n'
+            else
+              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
+              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+            fi
             printf '\n### Docker Hub Mirror\n'
-            if [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              printf -- '- Skipped for pull request validation.\n'
+            elif [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
               printf -- '- Skipped: set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable Docker Hub publishing.\n'
             elif [ "${{ steps.decide.outputs.do_build }}" != "true" ]; then
               printf -- '- No image build was required, so Docker Hub was not updated.\n'
@@ -307,4 +386,3 @@ jobs:
               printf -- '- Mirror was attempted but did not complete successfully.\n'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-
