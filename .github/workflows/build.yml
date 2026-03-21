@@ -301,7 +301,7 @@ jobs:
       - name: Metadata
         if: steps.decide.outputs.do_build == 'true'
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age
           tags: |
