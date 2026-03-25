@@ -24,15 +24,19 @@ jobs:
         id: dockerhub
         shell: bash
         env:
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_REPOSITORY }}
         run: |
           set -euo pipefail
 
           if [ -n "${DOCKERHUB_USERNAME:-}" ] && [ -n "${DOCKERHUB_TOKEN:-}" ]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "repository=${DOCKERHUB_REPOSITORY:-${DOCKERHUB_USERNAME}/${REPOSITORY_NAME}}" >> "$GITHUB_OUTPUT"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "repository=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Update Docker Hub description
@@ -41,7 +45,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: smoochy84/komodo-periphery-sops-age
+          repository: ${{ steps.dockerhub.outputs.repository }}
           short-description: Komodo Periphery image with SOPS and age, rebuilt on upstream changes
           readme-filepath: ./README.dockerhub.md
           enable-url-completion: true
@@ -51,7 +55,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ steps.dockerhub.outputs.enabled }}" = "true" ]; then
-            printf 'Docker Hub description sync completed for `smoochy84/komodo-periphery-sops-age`.\n' >> "$GITHUB_STEP_SUMMARY"
+            printf "Docker Hub description sync completed for \`${{ steps.dockerhub.outputs.repository }}\`.\n" >> "$GITHUB_STEP_SUMMARY"
           else
-            printf 'Docker Hub description sync skipped. Set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable it.\n' >> "$GITHUB_STEP_SUMMARY"
+            printf "Docker Hub description sync skipped. Set \`DOCKERHUB_USERNAME\` and \`DOCKERHUB_TOKEN\` repository secrets to enable it.\n" >> "$GITHUB_STEP_SUMMARY"
           fi

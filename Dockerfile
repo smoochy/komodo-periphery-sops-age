@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ghcr.io/moghtech/komodo-periphery:latest
+FROM ghcr.io/moghtech/komodo-periphery:2
 
 USER root
 
@@ -42,7 +42,7 @@ RUN set -eux; \
     sops --version --check-for-updates; \
     age --version
 
-LABEL org.opencontainers.image.base.name="ghcr.io/moghtech/komodo-periphery:latest"
+LABEL org.opencontainers.image.base.name="ghcr.io/moghtech/komodo-periphery:2"
 LABEL org.opencontainers.image.base.version="${BASE_VERSION}"
 LABEL org.opencontainers.image.base.digest="${BASE_DIGEST}"
 LABEL org.opencontainers.image.sops.version="${SOPS_VERSION}"

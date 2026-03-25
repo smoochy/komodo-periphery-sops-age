@@ -106,14 +106,20 @@ jobs:
         id: registries
         shell: bash
         env:
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_REPOSITORY: ${{ vars.DOCKERHUB_REPOSITORY }}
         run: |
           set -euo pipefail
 
+          ghcr_image="ghcr.io/${{ github.repository_owner }}/${REPOSITORY_NAME}"
+          echo "ghcr_image=${ghcr_image}" >> "$GITHUB_OUTPUT"
+
           if [ -n "${DOCKERHUB_USERNAME:-}" ] && [ -n "${DOCKERHUB_TOKEN:-}" ]; then
+            dockerhub_repo="${DOCKERHUB_REPOSITORY:-${DOCKERHUB_USERNAME}/${REPOSITORY_NAME}}"
             echo "dockerhub_enabled=true" >> "$GITHUB_OUTPUT"
-            echo "dockerhub_image=${DOCKERHUB_USERNAME}/komodo-periphery-sops-age" >> "$GITHUB_OUTPUT"
+            echo "dockerhub_image=${dockerhub_repo}" >> "$GITHUB_OUTPUT"
           else
             echo "dockerhub_enabled=false" >> "$GITHUB_OUTPUT"
             echo "dockerhub_image=" >> "$GITHUB_OUTPUT"
@@ -128,8 +134,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          IMAGE="ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest"
-          BASE="ghcr.io/moghtech/komodo-periphery:latest"
+          BASE="ghcr.io/moghtech/komodo-periphery:2"
+          IMAGE="${{ steps.registries.outputs.ghcr_image }}"
 
           GH_API="https://api.github.com"
           AUTH_HEADER="Authorization: Bearer ${GH_TOKEN}"
@@ -137,7 +143,7 @@ jobs:
           # Always compute "selected" versions/digest for this run
           BASE_DIGEST="$(crane digest "$BASE")"
 
-          # Determine periphery x.y.z tag that matches BASE (latest) digest
+          # Determine periphery x.y.z tag that matches the selected BASE digest
           BASE_CFG="$(crane config "$BASE")"
 
           # Try common version labels from the base image
@@ -155,8 +161,7 @@ jobs:
 
             # Prefer newest first by version sort
             if [ "${#tags[@]}" -gt 0 ]; then
-              IFS=$'\n' tags_sorted=($(printf '%s\n' "${tags[@]}" | sort -V -r))
-              unset IFS
+              mapfile -t tags_sorted < <(printf '%s\n' "${tags[@]}" | sort -V -r)
 
               for t in "${tags_sorted[@]}"; do
                 d="$(crane digest "ghcr.io/moghtech/komodo-periphery:${t}")"
@@ -173,7 +178,16 @@ jobs:
             exit 1
           fi
 
-          echo "periphery_tag=$PERIPHERY_TAG" >> "$GITHUB_OUTPUT"
+          IFS='.' read -r PERIPHERY_MAJOR PERIPHERY_MINOR _ <<< "$PERIPHERY_TAG"
+          PERIPHERY_MAJOR_TAG="${PERIPHERY_MAJOR}"
+          PERIPHERY_MINOR_TAG="${PERIPHERY_MAJOR}.${PERIPHERY_MINOR}"
+          CURRENT_IMAGE="${IMAGE}:${PERIPHERY_MAJOR_TAG}"
+
+          {
+            echo "periphery_tag=$PERIPHERY_TAG"
+            echo "periphery_major_tag=$PERIPHERY_MAJOR_TAG"
+            echo "periphery_minor_tag=$PERIPHERY_MINOR_TAG"
+          } >> "$GITHUB_OUTPUT"
 
           SOPS_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/getsops/sops/releases/latest" | jq -r '.tag_name')"
           AGE_TAG="$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json"             "${GH_API}/repos/FiloSottile/age/releases/latest" | jq -r '.tag_name')"
@@ -184,28 +198,35 @@ jobs:
           SOPS_RELEASE_URL="https://github.com/getsops/sops/releases/tag/${SOPS_TAG}"
           AGE_RELEASE_URL="https://github.com/FiloSottile/age/releases/tag/${AGE_TAG}"
 
-          echo "base_digest=$BASE_DIGEST" >> "$GITHUB_OUTPUT"
-          echo "sops_version=$SOPS_VERSION" >> "$GITHUB_OUTPUT"
-          echo "age_version=$AGE_VERSION" >> "$GITHUB_OUTPUT"
-          echo "sops_release_url=$SOPS_RELEASE_URL" >> "$GITHUB_OUTPUT"
-          echo "age_release_url=$AGE_RELEASE_URL" >> "$GITHUB_OUTPUT"
+          {
+            echo "base_digest=$BASE_DIGEST"
+            echo "sops_version=$SOPS_VERSION"
+            echo "age_version=$AGE_VERSION"
+            echo "sops_release_url=$SOPS_RELEASE_URL"
+            echo "age_release_url=$AGE_RELEASE_URL"
+          } >> "$GITHUB_OUTPUT"
 
           # Read "current" versions/digest from the published image (if it exists)
           CURRENT_BASE_DIGEST=""
+          CURRENT_BASE_VERSION=""
           CURRENT_SOPS_VERSION=""
           CURRENT_AGE_VERSION=""
 
-          if crane manifest "$IMAGE" >/dev/null 2>&1; then
-            cfg="$(crane config "$IMAGE")"
+          if crane manifest "$CURRENT_IMAGE" >/dev/null 2>&1; then
+            cfg="$(crane config "$CURRENT_IMAGE")"
             CURRENT_BASE_DIGEST="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.base.digest"] // ""')"
+            CURRENT_BASE_VERSION="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.base.version"] // .config.Labels["org.opencontainers.image.base.tag"] // ""')"
             CURRENT_SOPS_VERSION="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.sops.version"] // ""')"
             CURRENT_AGE_VERSION="$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.age.version"] // ""')"
           fi
 
           # Keep these as outputs (handy for debugging / future reuse)
-          echo "current_base_digest=$CURRENT_BASE_DIGEST" >> "$GITHUB_OUTPUT"
-          echo "current_sops_version=$CURRENT_SOPS_VERSION" >> "$GITHUB_OUTPUT"
-          echo "current_age_version=$CURRENT_AGE_VERSION" >> "$GITHUB_OUTPUT"
+          {
+            echo "current_base_digest=$CURRENT_BASE_DIGEST"
+            echo "current_base_version=$CURRENT_BASE_VERSION"
+            echo "current_sops_version=$CURRENT_SOPS_VERSION"
+            echo "current_age_version=$CURRENT_AGE_VERSION"
+          } >> "$GITHUB_OUTPUT"
 
           # Determine forced build conditions
           FORCED="false"
@@ -255,17 +276,17 @@ jobs:
 
           if [ -z "$CURRENT_BASE_DIGEST" ] || [ "$CURRENT_BASE_DIGEST" != "$BASE_DIGEST" ]; then
             CHANGED="true"
-            reasons+=("komodo-periphery base changed: ${CURRENT_BASE_DIGEST:-<none>} -> ${BASE_DIGEST}")
+            reasons+=("komodo-periphery base changed: ${CURRENT_BASE_DIGEST:-(none)} -> ${BASE_DIGEST}")
           fi
 
           if [ "$CURRENT_SOPS_VERSION" != "$SOPS_VERSION" ]; then
             CHANGED="true"
-            reasons+=("SOPS updated: ${CURRENT_SOPS_VERSION:-<none>} -> ${SOPS_VERSION} ([release notes](${SOPS_RELEASE_URL}))")
+            reasons+=("SOPS updated: ${CURRENT_SOPS_VERSION:-(none)} -> ${SOPS_VERSION} ([release notes](${SOPS_RELEASE_URL}))")
           fi
 
           if [ "$CURRENT_AGE_VERSION" != "$AGE_VERSION" ]; then
             CHANGED="true"
-            reasons+=("age updated: ${CURRENT_AGE_VERSION:-<none>} -> ${AGE_VERSION} ([release notes](${AGE_RELEASE_URL}))")
+            reasons+=("age updated: ${CURRENT_AGE_VERSION:-(none)} -> ${AGE_VERSION} ([release notes](${AGE_RELEASE_URL}))")
           fi
 
           # Final decision
@@ -283,16 +304,19 @@ jobs:
             printf '%s\n' "${reasons[@]}" | sed 's/^/- /'
             echo ""
             echo "### Selected versions (this run)"
+            echo "- target image: ${IMAGE}"
+            echo "- komodo-periphery base channel: ${BASE}"
             echo "- komodo-periphery digest: ${BASE_DIGEST}"
             echo "- komodo-periphery tag: ${PERIPHERY_TAG}"
+            echo "- published tags: ${PERIPHERY_MAJOR_TAG}, ${PERIPHERY_MINOR_TAG}, ${PERIPHERY_TAG}"
             echo "- SOPS: ${SOPS_VERSION} (${SOPS_RELEASE_URL})"
             echo "- age: ${AGE_VERSION} (${AGE_RELEASE_URL})"
             echo ""
             echo "### Current versions (published image)"
-            echo "- komodo-periphery digest: ${CURRENT_BASE_DIGEST:-<none>}"
-            echo "- komodo-periphery tag: ${PERIPHERY_TAG}"
-            echo "- SOPS: ${CURRENT_SOPS_VERSION:-<none>}"
-            echo "- age: ${CURRENT_AGE_VERSION:-<none>}"
+            echo "- komodo-periphery digest: ${CURRENT_BASE_DIGEST:-(none)}"
+            echo "- komodo-periphery tag: ${CURRENT_BASE_VERSION:-(none)}"
+            echo "- SOPS: ${CURRENT_SOPS_VERSION:-(none)}"
+            echo "- age: ${CURRENT_AGE_VERSION:-(none)}"
             echo ""
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
@@ -303,9 +327,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age
+          images: ${{ steps.registries.outputs.ghcr_image }}
           tags: |
-            type=raw,value=latest
+            type=raw,value=${{ steps.decide.outputs.periphery_major_tag }}
+            type=raw,value=${{ steps.decide.outputs.periphery_minor_tag }}
             type=raw,value=${{ steps.decide.outputs.periphery_tag }}
 
 
@@ -320,7 +345,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: |
             ${{ steps.meta.outputs.labels }}
-            org.opencontainers.image.base.name=ghcr.io/moghtech/komodo-periphery:latest
+            org.opencontainers.image.version=${{ steps.decide.outputs.periphery_tag }}
+            org.opencontainers.image.base.name=ghcr.io/moghtech/komodo-periphery:2
             org.opencontainers.image.base.tag=${{ steps.decide.outputs.periphery_tag }}
             org.opencontainers.image.base.digest=${{ steps.decide.outputs.base_digest }}
             org.opencontainers.image.base.version=${{ steps.decide.outputs.periphery_tag }}
@@ -348,14 +374,16 @@ jobs:
         shell: bash
         env:
           DOCKERHUB_IMAGE: ${{ steps.registries.outputs.dockerhub_image }}
+          PERIPHERY_MAJOR_TAG: ${{ steps.decide.outputs.periphery_major_tag }}
+          PERIPHERY_MINOR_TAG: ${{ steps.decide.outputs.periphery_minor_tag }}
           PERIPHERY_TAG: ${{ steps.decide.outputs.periphery_tag }}
         run: |
           set -euo pipefail
 
-          src_base="ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age"
+          src_base="${{ steps.registries.outputs.ghcr_image }}"
           dst_base="${DOCKERHUB_IMAGE}"
 
-          for tag in latest "${PERIPHERY_TAG}"; do
+          for tag in "${PERIPHERY_MAJOR_TAG}" "${PERIPHERY_MINOR_TAG}" "${PERIPHERY_TAG}"; do
             crane copy "${src_base}:${tag}" "${dst_base}:${tag}"
           done
 
@@ -367,22 +395,24 @@ jobs:
             printf '%s\n' "${{ steps.decide.outputs.reasons_md }}"
             printf '\n### Image\n'
             if [ "${{ github.event_name }}" = "pull_request" ]; then
-              printf -- '- Validation build only. No image was pushed.\n'
+              printf -- "- Validation build only. No image was pushed.\n"
             else
-              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:latest`\n'
-              printf -- '- `ghcr.io/${{ github.repository_owner }}/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+              printf -- "- \`${{ steps.registries.outputs.ghcr_image }}:${{ steps.decide.outputs.periphery_major_tag }}\`\n"
+              printf -- "- \`${{ steps.registries.outputs.ghcr_image }}:${{ steps.decide.outputs.periphery_minor_tag }}\`\n"
+              printf -- "- \`${{ steps.registries.outputs.ghcr_image }}:${{ steps.decide.outputs.periphery_tag }}\`\n"
             fi
             printf '\n### Docker Hub Mirror\n'
             if [ "${{ github.event_name }}" = "pull_request" ]; then
-              printf -- '- Skipped for pull request validation.\n'
+              printf -- "- Skipped for pull request validation.\n"
             elif [ "${{ steps.registries.outputs.dockerhub_enabled }}" != "true" ]; then
-              printf -- '- Skipped: set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable Docker Hub publishing.\n'
+              printf -- "- Skipped: set \`DOCKERHUB_USERNAME\` and \`DOCKERHUB_TOKEN\` repository secrets to enable Docker Hub publishing.\n"
             elif [ "${{ steps.decide.outputs.do_build }}" != "true" ]; then
-              printf -- '- No image build was required, so Docker Hub was not updated.\n'
+              printf -- "- No image build was required, so Docker Hub was not updated.\n"
             elif [ "${{ steps.dockerhub_mirror.outcome }}" = "success" ]; then
-              printf -- '- `smoochy84/komodo-periphery-sops-age:latest`\n'
-              printf -- '- `smoochy84/komodo-periphery-sops-age:${{ steps.decide.outputs.periphery_tag }}`\n'
+              printf -- "- \`${{ steps.registries.outputs.dockerhub_image }}:${{ steps.decide.outputs.periphery_major_tag }}\`\n"
+              printf -- "- \`${{ steps.registries.outputs.dockerhub_image }}:${{ steps.decide.outputs.periphery_minor_tag }}\`\n"
+              printf -- "- \`${{ steps.registries.outputs.dockerhub_image }}:${{ steps.decide.outputs.periphery_tag }}\`\n"
             else
-              printf -- '- Mirror was attempted but did not complete successfully.\n'
+              printf -- "- Mirror was attempted but did not complete successfully.\n"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
