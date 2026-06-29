@@ -100,7 +100,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup crane
-        uses: imjasonh/setup-crane@v0.6
+        uses: imjasonh/setup-crane@v0.7
 
       - name: Determine optional registry targets
         id: registries
