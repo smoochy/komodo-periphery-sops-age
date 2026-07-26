@@ -61,6 +61,7 @@ jobs:
         with:
           add-paths: |
             openwiki
+            CLAUDE.md
           branch: openwiki/update
           commit-message: "docs: update OpenWiki"
           title: "docs: update OpenWiki"
