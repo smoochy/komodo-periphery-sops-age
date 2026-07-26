@@ -3,14 +3,40 @@ name: OpenWiki Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 5 1-7,15-21 * 5"
+    - cron: "0 5 * * 5"
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
+  # GitHub cron cannot express "every other week", so the weekly schedule is
+  # gated here on ISO week parity. Manual dispatch always runs.
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.parity.outputs.run }}
+    steps:
+      - name: Check ISO week parity
+        id: parity
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 10# forces base-10; date +%V emits 08/09, which bash reads as
+          # invalid octal without it.
+          week=$(( 10#$(date -u +%V) % 2 ))
+          if [ "$week" -eq 0 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Odd ISO week; skipping this run."
+          fi
+
   update:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
