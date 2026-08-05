@@ -52,26 +52,40 @@ jobs:
       - name: Install OpenWiki
         run: npm install --global openwiki
 
-      - name: Pick best model from openrouter-model-list
-        # models-openwiki.json is score-sorted; take the top sanity_ok model.
+      - name: Pick candidate models from openrouter-model-list
+        # models-openwiki.json is score-sorted; keep every sanity_ok model as a
+        # fallback candidate. sanity_ok only proves a smoke call succeeded, not
+        # that the model survives a full run, so a single id is not enough.
         run: |
-          MODEL=$(curl -sf https://raw.githubusercontent.com/smoochy/openrouter-model-list/main/models-openwiki.json \
-            | jq -r '[.models[] | select(.sanity_ok)][0].id // empty')
-          if [ -z "$MODEL" ]; then
+          MODELS=$(curl -sf https://raw.githubusercontent.com/smoochy/openrouter-model-list/main/models-openwiki.json \
+            | jq -r '[.models[] | select(.sanity_ok) | .id] | join(" ")')
+          if [ -z "$MODELS" ]; then
             echo "No sanity_ok model in models-openwiki.json" >&2
             exit 1
           fi
-          echo "Using model: $MODEL"
-          echo "OPENWIKI_MODEL_ID=$MODEL" >> "$GITHUB_ENV"
+          echo "Candidate models: $MODELS"
+          echo "OPENWIKI_MODEL_IDS=$MODELS" >> "$GITHUB_ENV"
 
       - name: Run OpenWiki
         # --update also handles the first run for code docs when env vars are set.
-        run: openwiki code --update --print
+        # Free models regularly return an empty response under load, so fall
+        # through to the next candidate instead of failing the whole run.
+        run: |
+          for model in $OPENWIKI_MODEL_IDS; do
+            echo "::group::OpenWiki with $model"
+            if OPENWIKI_MODEL_ID="$model" openwiki code --update --print; then
+              echo "::endgroup::"
+              exit 0
+            fi
+            echo "::endgroup::"
+            echo "Model $model failed; trying next candidate."
+          done
+          echo "All candidate models failed." >&2
+          exit 1
         env:
           OPENWIKI_TELEMETRY_DISABLED: "1"
           OPENWIKI_PROVIDER: openrouter
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENWIKI_MODEL_ID: ${{ env.OPENWIKI_MODEL_ID }}
           # OpenRouter free tier allows 16 requests/min; retry through 429s
           # instead of dying on the first one.
           OPENWIKI_PROVIDER_RETRY_ATTEMPTS: "10"
