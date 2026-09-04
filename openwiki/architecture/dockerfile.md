@@ -2,8 +2,14 @@
 type: Architecture
 title: Dockerfile
 description: Dockerfile reference for komodo-periphery-sops-age, detailing base image, installation steps, build arguments, OCI labels, and multi-arch handling.
-resource: file:///openwiki/architecture/dockerfile.md
 tags: [architecture, dockerfile, docker, sops, age]
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
+sources:
+  - id: openwiki-source-bb1ebe868e35e9e500714501
+    resource: repo://Dockerfile
+generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 ---
 
 # Dockerfile Reference
@@ -106,62 +112,38 @@ ARG AGE_VERSION
 ARG BASE_DIGEST=""
 ARG BASE_VERSION=""
 ```
-| Arg | Source | Required | Purpose |
-|-----|--------|----------|---------|
-| `TARGETARCH` | Buildx (auto) | Yes | Target architecture for multi-arch |
-| `SOPS_VERSION` | Workflow | Yes | SOPS release version (e.g., `3.8.1`) |
-| `AGE_VERSION` | Workflow | Yes | age release version (e.g., `1.2.0`) |
-| `BASE_DIGEST` | Workflow | No | Base image digest for label |
-| `BASE_VERSION` | Workflow | No | Base image version tag for label |
+- **TARGETARCH:** Set by docker/build-push-action for multi-arch builds; defaults to `amd64` if not set (via `${TARGETARCH:-amd64}`).
+- **SOPS_VERSION** and **AGE_VERSION:** Injected by the build workflow to pin specific tool versions.
+- **BASE_DIGEST** and **BASE_VERSION:** Left empty by default; populated by the build workflow to record the base image's digest and version for traceability.
 
-**Note:** `BASE_DIGEST` and `BASE_VERSION` default to empty strings so the Dockerfile builds locally without the workflow.
-
-### Tool Installation (lines 23-43)
-
-#### Architecture Mapping (lines 24-29)
+### Architecture Detection and Tool Installation (lines 23-43)
 ```dockerfile
-arch="${TARGETARCH:-amd64}";
-case "$arch" in
-amd64) sops_arch="amd64"; age_arch="amd64" ;;
-arm64) sops_arch="arm64"; age_arch="arm64" ;;
-*) echo "Unsupported TARGETARCH: $arch"; exit 1 ;;
-esac;
+RUN set -eux; \
+    arch="${TARGETARCH:-amd64}"; \
+    case "$arch" in \
+    amd64) sops_arch="amd64"; age_arch="amd64" ;; \
+    arm64) sops_arch="arm64"; age_arch="arm64" ;; \
+    *) echo "Unsupported TARGETARCH: $arch"; exit 1 ;; \
+    esac; \
+    \
+    curl -fsSL -o /usr/local/bin/sops \
+    "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.${sops_arch}"; \
+    chmod +x /usr/local/bin/sops; \
+    \
+    curl -fsSL -o /tmp/age.tar.gz \
+    "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-${age_arch}.tar.gz"; \
+    tar -xzf /tmp/age.tar.gz -C /tmp; \
+    mv "/tmp/age/age" "/tmp/age/age-keygen" /usr/local/bin/; \
+    chmod +x /usr/local/bin/age /usr/local/bin/age-keygen; \
+    rm -rf /tmp/age /tmp/age.tar.gz; \
+    \
+    sops --version --check-for-updates; \
+    age --version
 ```
-- Maps Buildx `TARGETARCH` to release asset naming conventions
-- Both SOPS and age use `amd64`/`arm64` in their release filenames
-- Fails fast on unsupported architectures
-
-#### SOPS Installation (lines 31-33)
-```dockerfile
-curl -fsSL -o /usr/local/bin/sops \
-"https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.${sops_arch}";
-chmod +x /usr/local/bin/sops;
-```
-- Downloads **static binary** directly from GitHub releases
-- Asset pattern: `sops-v{VERSION}.linux.{ARCH}`
-- Installs to `/usr/local/bin/sops` (in PATH)
-
-#### age Installation (lines 35-40)
-```dockerfile
-curl -fsSL -o /tmp/age.tar.gz \
-"https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-${age_arch}.tar.gz";
-tar -xzf /tmp/age.tar.gz -C /tmp;
-mv "/tmp/age/age" "/tmp/age/age-keygen" /usr/local/bin/;
-chmod +x /usr/local/bin/age /usr/local/bin/age-keygen;
-rm -rf /tmp/age /tmp/age.tar.gz;
-```
-- Downloads **tarball** containing both `age` and `age-keygen`
-- Asset pattern: `age-v{VERSION}-linux-{ARCH}.tar.gz`
-- Extracts, moves both binaries, cleans up
-
-#### Verification (lines 42-43)
-```dockerfile
-sops --version --check-for-updates;
-age --version
-```
-- Validates binaries execute correctly
-- `--check-for-updates` exercises SOPS network stack (non-fatal)
-- Output appears in build logs for verification
+- **Architecture mapping:** Converts `TARGETARCH` (e.g., `amd64`, `arm64`) to the asset naming used by SOPS and age.
+- **SOPS installation:** Downloads the pre-built binary for the detected architecture, makes it executable, and verifies it.
+- **age installation:** Downloads the tar.gz archive, extracts it, moves the `age` and `age-keygen` binaries to `/usr/local/bin`, and cleans up.
+- **Version check:** Runs `sops --version --check-for-updates` and `age --version` to confirm installation and note any available updates (non-fatal).
 
 ### OCI Labels (lines 45-49)
 ```dockerfile
@@ -171,72 +153,6 @@ LABEL org.opencontainers.image.base.digest="${BASE_DIGEST}"
 LABEL org.opencontainers.image.sops.version="${SOPS_VERSION}"
 LABEL org.opencontainers.image.age.version="${AGE_VERSION}"
 ```
-| Label | Value Source | Example |
-|-------|--------------|---------|
-| `org.opencontainers.image.base.name` | Constant | `ghcr.io/moghtech/komodo-periphery:2` |
-| `org.opencontainers.image.base.version` | `BASE_VERSION` arg | `2.1.3` |
-| `org.opencontainers.image.base.digest` | `BASE_DIGEST` arg | `sha256:abc123...` |
-| `org.opencontainers.image.sops.version` | `SOPS_VERSION` arg | `3.8.1` |
-| `org.opencontainers.image.age.version` | `AGE_VERSION` arg | `1.2.0` |
-
-**Note:** `org.opencontainers.image.version` (the image's own version) is applied by the workflow via `docker/metadata-action`, not in the Dockerfile.
-
-## Multi-Architecture Handling
-
-The Dockerfile is architecture-agnostic except for the `TARGETARCH` mapping. Buildx handles:
-- Cross-compilation via QEMU (for `arm64` on `amd64` runners)
-- Manifest list creation combining both architectures
-- Automatic `TARGETARCH` injection per platform
-
-## Build Command (Workflow-Equivalent)
-
-```bash
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --build-arg SOPS_VERSION=3.8.1 \
-  --build-arg AGE_VERSION=1.2.0 \
-  --build-arg BASE_DIGEST=sha256:... \
-  --build-arg BASE_VERSION=2.1.3 \
-  -t ghcr.io/smoochy/komodo-periphery-sops-age:2.1.3 \
-  --push .
-```
-
-## Change Guidance
-
-| Change | Location |
-|--------|----------|
-| Update base image | Line 2 (`FROM`) + workflow line 137 |
-| Add system dependency | Lines 6-15 (apk/apt-get blocks) |
-| Change SOPS download URL | Line 32 |
-| Change age download URL | Line 36 |
-| Add new binary to install | After line 40, before verification |
-| Modify architecture support | Lines 25-29 (case statement) |
-| Change install destination | Lines 32, 38 (`/usr/local/bin/`) |
-| Add OCI label | Lines 45-49 (new LABEL line) |
-
-## Validation Commands
-
-```bash
-# Build locally (single arch, no workflow)
-docker build \
-  --build-arg SOPS_VERSION=3.8.1 \
-  --build-arg AGE_VERSION=1.2.0 \
-  -t komodo-periphery-sops-age:local .
-
-# Test binaries in built image
-docker run --rm komodo-periphery-sops-age:local sops --version
-docker run --rm komodo-periphery-sops-age:local age --version
-docker run --rm komodo-periphery-sops-age:local age-keygen --version
-
-# Inspect labels
-docker inspect komodo-periphery-sops-age:local --format '{{json .Config.Labels}}' | jq
-```
-
-## Relationships
-
-- **Consumed by** → [Build System](build-system.md) via `docker/build-push-action`
-- **Receives versions from** → Build System (build args)
-<!-- openwiki: broken internal link [reference/image-metadata.md] file "reference/image-metadata.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- **Produces** → [Image Metadata](reference/image-metadata.md) (labels)
-- **Base image** → `ghcr.io/moghtech/komodo-periphery:2`
-- **Upstream sources** → `getsops/sops` releases, `FiloSottile/age` releases
+- **base.name:** Notes the base image reference used.
+- **base.version** and **base.digest:** Record the exact version and digest of the base image (set at build time).
+- **sops.version** and **age.version:** Record the versions of the installed tools.

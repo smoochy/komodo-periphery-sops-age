@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:572c3bce955308c3ca2b85e9c4942669d820b7af3d0c3981998d6f7b1a1e7f3c",
+  "claims": [
+    {
+      "id": "claim_a8d145ec9db148e39db095464e8d36c1",
+      "statement": "The komodo-periphery-sops-age repository provides a Docker image that extends ghcr.io/moghtech/komodo-periphery:2 with SOPS and age preinstalled for encrypted configuration workflows.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile#L1-L2",
+          "version": "repo-lines-v1:sha256:5ee7ff3050112495155d885ae07505d5602083e9d8e14c2faff797a7a2af820d:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNDhiZDc1OGEwNGIyNTgwYzYwMjFhODZkZmJjZTIxMWYwMTVhMWRkNWNjNGYzOWMxM2I2ZWNmZTE1NzI5MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTExYTFhOWFjNjhlNDQzNGRjMThlYzQyYjEyZTZlYzliODU1ZmJiYjZmMmYzY2M0ZWIxZjFhMDA4ZjUzMWRiYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWQ5NzQ2N2Q3MWVmMTk3MDhiYzRmY2Y1ZTc3NTQ0YjUwMzQzNzUyM2NhZGU2NzJmZTYxOGJhMDBhZGUzNzI2MiJ9"
+        },
+        {
+          "resource": "repo://Dockerfile#L23-L43",
+          "version": "repo-lines-v1:sha256:579aa76f85cdc4f1ed25051812fce5da7c081888986121ff772e1cdf270e1b13:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NTRhOWE1OTllOTNiZmNmNjNhMTZjZmIwNTZiNzM0OWEzYmRiYzRlMGQ4MWUyZjZhYTBkMmVkMjVlZDMzMmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwN2NmMzhiMmUzNTFiMmMzNWQ0Mjc5N2VlMjMwYTI3MDQ4YTE2MDk5NmY1NWNiYzIyNThkODAzMzk4ODViZjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjMDAzY2Y5YTU5ODUxYzg0MWI4NjU2YmM4ZTE3MGE2N2Y0ODMzNDA4MTQ5YWYyMzIzOTVmYjhlNzE3ZjFmNzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM4M2JmZjhkMjk1ZjczZmI2ZDIxYTNhNTI1MGJmMWQ3OGZhNmE2YzdmZjgzMGEzZDg4MTQ0OTY5MWFiMTFmM2MifQ"
+        },
+        {
+          "resource": "repo://README.md#L8-L11",
+          "version": "repo-lines-v1:sha256:0109097ef82055afde8c11a39dcb983bea97beb09e5f9f178dce854ed0422439:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWI2ZmQzZGE1MWQ3ZjViODEwYzlhOGNiYzJhOTkwYjgwZTJkOGZhYmY3MzM4OTVlOTMzMTk0MzUxY2IzN2ZjNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzY0YTQ1M2U1ZmU5YzJkMTc3YWI1YWE4MjNlZTYxZTdhNGQxYjI0YjJmMGEyNzMzODgxMTUxZmYxMTM5NjcyZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2JiZmNhMDE4ZjNkMDU3ZjdiOWQzZGUwZGZjMTM2ZjYwYzFhYTM0ZDI1NDM5ZTg4MzAwMjJlMDQ0ODkxNDhjZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_efa4ef7f8eb64397aacec25a94e33eab",
+      "statement": "The image is published to GHCR at ghcr.io/smoochy/komodo-periphery-sops-age and mirrored to Docker Hub at smoochy84/komodo-periphery-sops-age.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L12-L15",
+          "version": "repo-lines-v1:sha256:f22cfd8786723f2ca9c3f6a197284840f53b81054e49cb837f8b98c912b63039:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTcwNzEwMDZmZDA1ZGQ2ZGM3NzdjYjMyMWNkMDk4ZjczODcyZTBlYzBmNjc1ZDk2NTdkYTdmMmZlZjdiYjExZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjIyMGQ3YTg1ODI4NTU4ODg4NGU0NjgxOWI1MjYxOTAzNWM2YzFmZWRhYjQyYmI2MWQyNzQ4YzhmZjY1NjdmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVhMWYwNzNhN2VmNjgxYzBkNGI3NDc5MTNkMDM0ZmM3MzVjNjhkMzllMTY1YjJkMTJjMjc3NGQ2MmQ1OTRhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2M5ZjljNWJmZDUxNDYyNGVhMGMwZDc4MGM5NDBhNjg4YmI3MDA3NDQwMDQ0NGUwOWUxMzBjMmVlNWE1ZWQyMiJ9"
+        },
+        {
+          "resource": "repo://README.md#L30-L31",
+          "version": "repo-lines-v1:sha256:9d70fe1e56d001147360047679fdbf3fad27a6988b2eff9d948e806369323bb0:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDI4YjIwMjg3NjE3MGRjMzMzYjFjYmYxYmI4ODE3ZmNlYzA1ZDQ3NGJmODdlOTg1NDIzYzgzM2I5NzlmZThkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmIzMjFiN2UwZWJlMDU4YzFhM2Y5YWMwOGY0NzI3N2Y4NmQwMGU1ZDNjZjQ1MWI3NzQxZDkzZWQ5YTkzOTE5ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDk5OTU0OGY2ZWI3NDhlNDcwMTM5ZWNlZDhiN2RjOTg2YTljYjI4OTliNDRhZGY4M2U2ZTZhZDZmYWYwNWM1MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2Q3MTExMzQyMjUwY2UyNDUzZjhjZWYzN2Y4YTExNWRmZmM1NzczZGRjMjE5MmQ4NjAzM2MyODlmYjZiM2FjZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7970158562a04768ac962a8ff809335f",
+      "statement": "The build workflow (.github/workflows/build.yml) triggers on pushes to main (when Dockerfile*, .dockerignore, or the workflow itself change), on a daily schedule, and on workflow_dispatch with a force option.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L4-L30",
+          "version": "repo-lines-v1:sha256:c289e0fb85cc6d82005a55f3bb250926babea1f2354785773799213aacaaa79e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4MGJhZDUyOGVlMDJlYzUxOTAyNDFhODEwMGU0ODZkYjM0MGI1YzM2MGUzMDc1ZTYxZGE3ZWU5NmJlYjA4MTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlMjc0MjI0ZTk4Mjg4MWQ5ODFiOGFkZGZkZGM5ODgwYjJmMWQwNzgwMzE1ZDcwZDVkNTE5MWM3NWY5NWE1YjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f47aaf26ea7a48118bfc3b2fd03d0e8e",
+      "statement": "Each build publishes three tags (major, minor, patch) derived from the resolved Komodo Periphery version (x.y.z).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L181-L184",
+          "version": "repo-lines-v1:sha256:4f56e7b13b3b49a18c28a2a0cce6c165d9f69300bc12955d2812656c8a55a06e:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjFlNTZlMjg0YzMzMDY2MGRjNmIyMDBhMGQ5YmNmNzM3NzFiNGMwYmNhNDU5YmRiZmM0NGEwMjI1NmVlMGQ4MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDUzMjRkZmY5ODc1Y2VlNTg3ZDM1MGQ4ZTBiNmM0ZTRmNDA4ZWRmMjg5MDU2OTk0YTNlZGU5OTE2NzQ1N2NjNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjdkZDYwMzA5NjFjNjZlZGE2ZDQ2MTkzMmI4YWY2MTI1NmFlMjgzZWI0M2VmNmI5OTJkNDVhZjg0NzkyYTBlZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGY5ZjViZDZiYzQ4N2M5ZDkzMjc0ZTQwMWNkZTdiOTk4ZmZhNDFmZDcwYWExZDY0MmRiNDNkMWUxNTliYzRlMCJ9"
+        },
+        {
+          "resource": "repo://README.md#L48-L51",
+          "version": "repo-lines-v1:sha256:51b1595b3703f5f69689b943d0bd90a13232f42bdf9613a5004cae971577dcad:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGViZGJjOTNmMjQ2NWQ4ZmM2Zjk2M2ExMGYyMjllNWY3NGQzY2I0OTQxYzJlYjNmYmY4M2NjY2Y0ZmVjMWY1OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWU1ODZiOTJiMTFiMmJhNTI5NjgyMjllNTkwZWM2YTgzYWZhOWY0YjYwZDI5Y2QxYmIwN2Q1NzgwNmYyZTA1NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTYzNzdlZmU3OWY3YTRjMGRjNjdmN2M0MWIwMDdhMjZhOGUxNTA5Nzg0ZTA1YjM2MDk1YjI4ODViMWNiZDFlNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzhmNDMyZDhjODdjZTA4Y2E1YTUzNDhjY2FlYTU3ZjU4ZDY2Yzk1ZTcxMWVmNTA0MTA4ZmUwN2VjZDhhYTc2NCJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-04T09:25:18.613Z"
+  }
+}

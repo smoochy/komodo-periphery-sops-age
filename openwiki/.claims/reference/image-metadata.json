@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:36047923593936218492debccb388dbd53e757c135ba69aabb442346a1d41fc8",
+  "claims": [
+    {
+      "id": "claim_98fb9f8d28274256ae81c59f1802000a",
+      "statement": "The komodo-periphery-sops-age image uses a three-tag scheme (major, minor, patch) derived from the Komodo Periphery version, with the patch tag being immutable and the major/minor tags being floating.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L277-L290",
+          "version": "repo-lines-v1:sha256:be11a3f9ba35e02a70f886836d3e6b0a00da58456b913cfd0d0e160706e6781d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZjYwYmY5MmZiY2MyNjY0MGQ0OWU5MDQwMjM3ODRjMmRjOGU1NzUzMjU5NjdhMzc0OTAwMmViZTZmZDAxMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxZjNkZjFjNTU4MGNkYjdmOTc0MmFjNjRkZDRhZDMzOTFhYWIwNjAwMjg2ZWYxNjdjZTBhOGQ0ZDBjYjM5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MDllNzE4ODFlZDA0OTM5MTczM2I3NzQ5YTAzNTZlMzllMzU0YTNlYTVlMTAzNzFmMTIxZDVlN2YxZTkxMzcifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L331-L334",
+          "version": "repo-lines-v1:sha256:b083f89ed0e918e59b513cbfa8c95b4ccb6e0a0b68fb20d108e59e8525344252:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODdmZjBkMjFiNjM4YTk1OTc0NzhlNjE2NDZhNWJhMmJlODc4MDExYTAwMjI5MDZmOTQ0ZjBmOTgyZjZjZmVmNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNhOTU1MjA2MGI4NDA2NGE2MjRlNDY3MDY0NDFlZTRlY2EwODEyZjAzMGVmMmQ4Y2RlNGU4ZTY3N2Y4ZGFjNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZmNzRhZTUxMjMzZGI4MGI5MWY4MmIwN2RhMDEyZWE4YThiN2MwNGE4MzI3NzRiOTFiODlhZTA5NzBkMmMzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmRjOGEwMzEwNWFkMDQzOWUxNWFlZDY4MTlmM2M5ODNmNWU4OGMzOGZhMzgzMTFhZjk0ZTk5NzNlNzdmNDM3ZCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_404a01a71d864d97b9dfad9a8b4642b0",
+      "statement": "The image's OCI labels include base image correlation (name, tag, version, digest) and tool versions (SOPS, age) that are set from the workflow outputs.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L346-L355",
+          "version": "repo-lines-v1:sha256:a541515b239ad4af9c06d642a7d939bf3d4818a3a4999c01223f16112299d89a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MWNlN2M1MWJlZWJhYWMzNjgyNzJmYzVkNDlhNmVmMzRkNWEyNzJlNzEzOTZkNDNmOTRmYWQ5MGE3YzE5NTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3Yzk4ODRlMDBjZTNiMTZhNzQ4YTQwZDBjNTY1YzdkYmY3ZGExYWZjY2U2OGFlNjU3MTU4OTY1NGE3MTI2YjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1MDE1YTk5MTQxMGU0OWNmMDBiNjljNmZiNWJjZWQyNWJlZjFlMGE5YjkzODMzNDk0YmZiMGE4NmVhNzNkNjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYzYjQ2NjU1ZGIyYjYxNjk1MGVkNGJiMjVlMjZjOTczNzQ0ZTk2ODgzZWU2ODNmMjBlYWI5NWMyZmNlZjAyMzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_98c18b0727ef4433a1f64a0fd6594511",
+      "statement": "The workflow tracks changes in the base image (by digest), SOPS (by release tag), and age (by release tag) to determine if a rebuild is necessary.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L144-L144",
+          "version": "repo-lines-v1:sha256:4164fdd40bbc93ee97cbf4c0168b7caf29f789dd85789c116f2b66cd89783547:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDE2NGZkZDQwYmJjOTNlZTk3Y2JmNGMwMTY4YjdjYWYyOWY3ODlkZDg1Nzg5YzExNmYyYjY2Y2Q4OTc4MzU0NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDE2NGZkZDQwYmJjOTNlZTk3Y2JmNGMwMTY4YjdjYWYyOWY3ODlkZDg1Nzg5YzExNmYyYjY2Y2Q4OTc4MzU0NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjBkOWRlZmNlMzAyZjYyOTAxZjE1MTFjNmY4MDU4ODczZmUxODMwYjI5MmU4NGQ2ZGM4YzUyZGM1NjM0NWE2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzIwMWQ1NzdjZGQ3MzgyODk1ZDhlMGUxMjcxOGRjYTQ0YzUxZGMxMzEwNjcxMDNmNjUxYjI0YWEyMmIyYzExMyJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L192-L193",
+          "version": "repo-lines-v1:sha256:5729a3bd4b3221c28b0156e4b303bfaa38c42e60eea6d9026ed283d4cf5c1d9c:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY2ZGE3NDAxZGFmMGUwZDFjOTc5Y2NkNjFiZGQ5NDk0ODhkZWQyM2I1NjAzZWVlMzJjYWViMTAxYmY4MjliYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjJmZDYxZGE0ZDU2NzRmYWNmMTEyNDJjYzZkY2E3YWJmOWI4MTlmMGY4ODQ1ZDYyMTMyNjJlODI0YjBiZWE0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmFhMWNjODIwZjQ5MTdmNWQ2NDk0MGMzNzFmNWUxZjFlNGU4M2I4MDVlMDg5ZTc5N2U1NDNmYzA4MDVlOGE3NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTZkNjIzZDlkYjQwZmVjYjg4MTJlYzhlY2JhOGZmYmU1NjlhYjZiZjA4Y2JlOWFhYmM1YTQ4ZDg3YTNmMjBjOCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L215-L221",
+          "version": "repo-lines-v1:sha256:dba6bf20401a3ac3217bc18cb1335f77ee20ce2020258f58fec950eb8aefb394:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUzM2RjODA2M2U0NjY2Yzc0OTMxYTFiYjQxZTBiZTJkZWZiMmNiM2E1OTUzOTFiZWE4MTI4MjIxMDg2NTYzYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmY1NTk3OWNlNzMwMjAzM2U2YjJmZDdkODhmNTM3YTNiOGUwOTFlYTMwNWM4MTFmZmExMjc0YmY1NzY0ZWE1ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjkyYzM2NWQzZTExNzE2MmY2NTI1Zjg5ZTQ2MTE5Y2NjOTFlODA2ZWVhODk2MjllNTJhMWQ0YjYxMTAyNWUxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmY0NmMwNmExYTM4MzIyZDQ3NzE0Yjc2ZGJhOTg5MzNjN2I1MjE4ZWYxNzRhYjc0MGJkN2NmZTA3Njc4MDdhOSJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L277-L290",
+          "version": "repo-lines-v1:sha256:be11a3f9ba35e02a70f886836d3e6b0a00da58456b913cfd0d0e160706e6781d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZjYwYmY5MmZiY2MyNjY0MGQ0OWU5MDQwMjM3ODRjMmRjOGU1NzUzMjU5NjdhMzc0OTAwMmViZTZmZDAxMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxZjNkZjFjNTU4MGNkYjdmOTc0MmFjNjRkZDRhZDMzOTFhYWIwNjAwMjg2ZWYxNjdjZTBhOGQ0ZDBjYjM5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MDllNzE4ODFlZDA0OTM5MTczM2I3NzQ5YTAzNTZlMzllMzU0YTNlYTVlMTAzNzFmMTIxZDVlN2YxZTkxMzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0a820034ab45437d9fc2725233192233",
+      "statement": "The image is published to GHCR at `ghcr.io/smoochy/komodo-periphery-sops-age` and mirrored to Docker Hub at `smoochy84/komodo-periphery-sops-age`.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L116-L116",
+          "version": "repo-lines-v1:sha256:8c70b67e33517df1e6b148e9bfc78a38312a6e7e6bb58baffb54c49580e140ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGM3MGI2N2UzMzUxN2RmMWU2YjE0OGU5YmZjNzhhMzgzMTJhNmU3ZTZiYjU4YmFmZmI1NGM0OTU4MGUxNDBhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGM3MGI2N2UzMzUxN2RmMWU2YjE0OGU5YmZjNzhhMzgzMTJhNmU3ZTZiYjU4YmFmZmI1NGM0OTU4MGUxNDBhYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZThiMTcyZmFjOWM4ZDJmODE5NzQzM2EyMWFmYTBjYzY5Nzg3Y2ZhNTg0MDM2N2Q2NTcxNWMxZTEyYTc5NjZjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzljYzVmNGY2N2U4NDVjZTIyYTZlMzhlNThlYjExOWM3NWQ3MmQzOGQwZTAzMzgxNmFhNWE2NzY4YTBjYTE3OCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L120-L120",
+          "version": "repo-lines-v1:sha256:df93b1c3cbb7b9b2e80d428cc241a43e04b5d0a1f24e11bdebb93b41e2d22089:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY5M2IxYzNjYmI3YjliMmU4MGQ0MjhjYzI0MWE0M2UwNGI1ZDBhMWYyNGUxMWJkZWJiOTNiNDFlMmQyMjA4OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY5M2IxYzNjYmI3YjliMmU4MGQ0MjhjYzI0MWE0M2UwNGI1ZDBhMWYyNGUxMWJkZWJiOTNiNDFlMmQyMjA4OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzljYzVmNGY2N2U4NDVjZTIyYTZlMzhlNThlYjExOWM3NWQ3MmQzOGQwZTAzMzgxNmFhNWE2NzY4YTBjYTE3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDE0ZjRiMjFmMTYwYmY0NzQxN2NjNzczYzY0ZDA4YWFkYmY3MTJmOWM1NTE4ODNlNzdhYTE3NDM2NmFmZTA2YiJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L338-L345",
+          "version": "repo-lines-v1:sha256:e69f3e6dd6d86fb6f83b9f9584ed3dac3e9fd32aed9ee448a2c477ed59c1c1aa:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTBmMGU4ZThmYzgxMGI0NTk2ZWJjMWIzZGE4OTZmMWM3ZDgyMTUwNzhmMjdlNDcxMGVlZjU4NTljOTBkZGEwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODZjNWI5Y2I2NDExNzZjNzFhZmJiNzhkYmM4NTUwZjg3ZWVjM2EyNzFkNzA3MTZlOTQzZTcyMTkwZWM4NmM4MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmRjOGEwMzEwNWFkMDQzOWUxNWFlZDY4MTlmM2M5ODNmNWU4OGMzOGZhMzgzMTFhZjk0ZTk5NzNlNzdmNDM3ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWI2NTg0OWQyMmIxN2ViOWVjMGEwM2M4ZmE3Y2YzOTMyNTgyMDU1ZTM4MzIxZmYxNzQxYjMzMTdhYzBiYzRjZCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L371-L388",
+          "version": "repo-lines-v1:sha256:17d0b540ea095900c391b6b6d381fa96b7b872d78a7c65ed74a704b48b0f3e20:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmZDdhMWQ2YTdiYzBjMzZhZDRiZGNkZWQ0YWJlY2E3OTUzMDMzMDI1YmM4MGNlYTQxOTUzY2I2NWEyM2VkM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4MTMzM2RmNjZkNTk1YzYyMjM3NDEyZTdkMTYwN2I1Y2ZiMDExNDdmMGYzYTlkYjdiN2FjNGU3MjljNDNkMjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzZGVlZTZjMzc3Yzg2N2VlOGIzYWEwMDZhMzMzOWJhNGU2OTkwNTIwMmViZGZiNzZiNjU1YTQxMDFlZWVkYzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmNzk2MTQ3NmFiYzZjYmVlMjA2YjhiODkzZWMwMDczNDkxMDMxM2NjZGYzODlhOWE5N2E3MzI1NDg3NGJiZWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cfe45fe610b940a2993570c1f8ba31f0",
+      "statement": "The patch tag (X.Y.Z) of the komodo-periphery-sops-age image corresponds exactly to the resolved x.y.z tag of the base image `ghcr.io/moghtech/komodo-periphery:2` used in the build.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L143-L174",
+          "version": "repo-lines-v1:sha256:86a77f28a4b202b8af38caca68e76e90683e7efdbc11ab44f7e0f8ba3467ef27:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0ZjgxODgyZGI4MWUwYzg2NmNhMjY5OTdiM2ZhODcxM2JmZjc4Njk5OGQyNzg1YjYxZmExMDAyM2UzM2MxMTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhNjI1YTQ2OWM1OGNlMzQyYWIwZjJjY2FjY2M5OTQ3MGMyOTI0YjU4NDNlY2E2MGNmYjczZDVjMjZhOWQ0ZjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM4NGNlMzBhM2M3OThmMWI1MjMyZWIxZTkzYjYzZmVlOWY3OTQ1ZDQyZGE1NmI1NzdjMzczZjE3ZTUxOTZjNGQifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L331-L334",
+          "version": "repo-lines-v1:sha256:b083f89ed0e918e59b513cbfa8c95b4ccb6e0a0b68fb20d108e59e8525344252:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODdmZjBkMjFiNjM4YTk1OTc0NzhlNjE2NDZhNWJhMmJlODc4MDExYTAwMjI5MDZmOTQ0ZjBmOTgyZjZjZmVmNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNhOTU1MjA2MGI4NDA2NGE2MjRlNDY3MDY0NDFlZTRlY2EwODEyZjAzMGVmMmQ4Y2RlNGU4ZTY3N2Y4ZGFjNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZmNzRhZTUxMjMzZGI4MGI5MWY4MmIwN2RhMDEyZWE4YThiN2MwNGE4MzI3NzRiOTFiODlhZTA5NzBkMmMzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmRjOGEwMzEwNWFkMDQzOWUxNWFlZDY4MTlmM2M5ODNmNWU4OGMzOGZhMzgzMTFhZjk0ZTk5NzNlNzdmNDM3ZCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L348-L348",
+          "version": "repo-lines-v1:sha256:199e3a39b0f40cdbdee2d4045f7a945e44db97c8b9930beb7e4f5ebaf15fe68b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTk5ZTNhMzliMGY0MGNkYmRlZTJkNDA0NWY3YTk0NWU0NGRiOTdjOGI5OTMwYmViN2U0ZjVlYmFmMTVmZTY4YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTk5ZTNhMzliMGY0MGNkYmRlZTJkNDA0NWY3YTk0NWU0NGRiOTdjOGI5OTMwYmViN2U0ZjVlYmFmMTVmZTY4YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmQyMjhmMDVkZjUyOTc0Mzc2MjJmYzIwYjNmMGU0NGZiNWQxMzQ4MTQxNWY4MjQyNzE5OGViZTAzOTFhZjRjNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzcyOWNmMjU5YmJhYTM0ZWI0NTlkMmY2NjBiY2Q0NDNmMzNmOTA2YzNkMjgzMGY5M2E4MDJkMjk5MGM0YjE0NiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-04T09:25:18.613Z"
+  }
+}

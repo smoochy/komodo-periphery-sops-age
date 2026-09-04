@@ -2,8 +2,16 @@
 type: Architecture
 title: Architecture Overview
 description: High-level architecture of the komodo-periphery-sops-age Docker image, including base image dependency, tool installation flow, and multi-arch support.
-resource: file:///openwiki/architecture/overview.md
 tags: [architecture, docker, komodo, sops, age]
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
+sources:
+  - id: openwiki-source-7a80b79a6fb3618cbfab08a2
+    resource: repo://.github/workflows/build.yml
+  - id: openwiki-source-bb1ebe868e35e9e500714501
+    resource: repo://Dockerfile
+generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 ---
 
 # Architecture Overview
@@ -58,6 +66,7 @@ The image exposes version metadata via standard OCI labels:
 |-------|--------|---------|
 | `org.opencontainers.image.version` | Periphery tag (x.y.z) | Image version |
 | `org.opencontainers.image.base.name` | Constant | Base image reference |
+| `org.opencontainers.image.base.tag` | Workflow-selected | Base image tag (x.y.z) |
 | `org.opencontainers.image.base.digest` | Resolved at build time | Base image digest |
 | `org.opencontainers.image.base.version` | Periphery tag | Base image version |
 | `org.opencontainers.image.sops.version` | Workflow-selected | SOPS version |
