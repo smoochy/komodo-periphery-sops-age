@@ -4,6 +4,13 @@ title: Image Metadata & Tags
 description: Tagging strategy, OCI labels, version tracking, and base image correlation for komodo-periphery-sops-age published images.
 resource: file:///openwiki/reference/image-metadata.md
 tags: [reference, tags, labels, oci, versioning]
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
+sources:
+  - id: openwiki-source-7a80b79a6fb3618cbfab08a2
+    resource: repo://.github/workflows/build.yml
+generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 ---
 
 # Image Metadata & Tags
@@ -46,20 +53,23 @@ flowchart TD
 Every published image carries the following OCI labels (applied via `docker/metadata-action` and Dockerfile `LABEL`):
 
 ### Image Identity
+
 | Label | Value | Source |
 |-------|-------|--------|
 | `org.opencontainers.image.version` | `X.Y.Z` (patch tag) | Workflow `periphery_tag` output |
 | `org.opencontainers.image.description` | `Komodo periphery with SOPS+age (auto rebuild on upstream updates)` | Workflow constant |
 
 ### Base Image Correlation
+
 | Label | Value | Source |
 |-------|-------|--------|
-| `org.opencontainers.image.base.name` | `ghcr.io/moghtech/komodo-periphery:2` | Dockerfile constant |
+| `org.opencontainers.image.base.name` | `ghcr.io/moghtech/komodo-periphery:2` | Workflow constant |
 | `org.opencontainers.image.base.tag` | `X.Y.Z` | Workflow `periphery_tag` output |
 | `org.opencontainers.image.base.version` | `X.Y.Z` | Workflow `periphery_tag` output |
 | `org.opencontainers.image.base.digest` | `sha256:...` | Workflow `base_digest` output |
 
 ### Tool Versions
+
 | Label | Value | Source |
 |-------|-------|--------|
 | `org.opencontainers.image.sops.version` | `X.Y.Z` (e.g., `3.8.1`) | Workflow `sops_version` output |

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "pages": {
+    "/openwiki/architecture/dockerfile.md": {
+      "pageVersion": "sha256:3af68856fb157f6f85c75a080ea1092eb47b380c4ad4521924edc2657570fd15",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "78e1e309-dec5-4f7a-8451-4b46ac5fdae8",
+      "gitHead": "b67e637db9d466042f00dd1199f6b9ceba8b9ab2",
+      "sourceFingerprint": "sha256:381e10364daf17b5610056ae9bebf045cf81424c0b43d2c7d37c204d41e9ff33"
+    },
+    "/openwiki/architecture/overview.md": {
+      "pageVersion": "sha256:24817f83be9b0b7a4ceb7d7503eb3c762f62cad11892df0379dbcc32aa6ed024",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "78e1e309-dec5-4f7a-8451-4b46ac5fdae8",
+      "gitHead": "b67e637db9d466042f00dd1199f6b9ceba8b9ab2",
+      "sourceFingerprint": "sha256:381e10364daf17b5610056ae9bebf045cf81424c0b43d2c7d37c204d41e9ff33"
+    },
+    "/openwiki/quickstart.md": {
+      "pageVersion": "sha256:572c3bce955308c3ca2b85e9c4942669d820b7af3d0c3981998d6f7b1a1e7f3c",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "78e1e309-dec5-4f7a-8451-4b46ac5fdae8",
+      "gitHead": "b67e637db9d466042f00dd1199f6b9ceba8b9ab2",
+      "sourceFingerprint": "sha256:381e10364daf17b5610056ae9bebf045cf81424c0b43d2c7d37c204d41e9ff33"
+    },
+    "/openwiki/reference/image-metadata.md": {
+      "pageVersion": "sha256:36047923593936218492debccb388dbd53e757c135ba69aabb442346a1d41fc8",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "78e1e309-dec5-4f7a-8451-4b46ac5fdae8",
+      "gitHead": "b67e637db9d466042f00dd1199f6b9ceba8b9ab2",
+      "sourceFingerprint": "sha256:381e10364daf17b5610056ae9bebf045cf81424c0b43d2c7d37c204d41e9ff33"
+    },
+    "/openwiki/usage/overview.md": {
+      "pageVersion": "sha256:f612f53814f2aec2109141aac42f52b09cbdaa4e996ed49487e94daa190b686b",
+      "completedBy": "openwiki/0.5.0",
+      "completedRunId": "78e1e309-dec5-4f7a-8451-4b46ac5fdae8",
+      "gitHead": "b67e637db9d466042f00dd1199f6b9ceba8b9ab2",
+      "sourceFingerprint": "sha256:381e10364daf17b5610056ae9bebf045cf81424c0b43d2c7d37c204d41e9ff33"
+    }
+  }
+}

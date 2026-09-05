@@ -4,6 +4,13 @@ title: Usage Overview
 description: Installation, usage examples, and verification steps for the komodo-periphery-sops-age Docker image.
 resource: file:///openwiki/usage/overview.md
 tags: [usage, docker, sops, age, examples]
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
+sources:
+  - id: openwiki-source-23775c3de52f3ab95a13cb8b
+    resource: repo://README.md
+generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 ---
 
 # Usage Overview
@@ -15,14 +22,14 @@ This page provides practical guidance for pulling, running, and verifying the ko
 ### Pull the Image
 
 ```bash
-# Latest major version (recommended for production)
+# Latest major version (tracks current Komodo major line)
 docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2
 
-# Specific minor version
-docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2.1
+# Latest minor version (tracks current Komodo minor line)
+docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2.0
 
-# Specific patch version (immutable)
-docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2.1.3
+# Specific patch version (immutable, matches exact Komodo release)
+docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2.0.0
 
 # Docker Hub mirror (if GHCR unavailable)
 docker pull smoochy84/komodo-periphery-sops-age:2

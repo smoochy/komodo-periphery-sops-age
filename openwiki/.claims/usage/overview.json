@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:f612f53814f2aec2109141aac42f52b09cbdaa4e996ed49487e94daa190b686b",
+  "claims": [
+    {
+      "id": "claim_b58f2fefa99c431783ec0e25c619fe6d",
+      "statement": "The komodo-periphery-sops-age image is published with three SemVer tags derived from the resolved Komodo Periphery version: major (X), minor (X.Y), and patch (X.Y.Z).",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L140-L146",
+          "version": "repo-lines-v1:sha256:a76bbbec20751dc20cb17dcd587e06a20fd8b1ba04a9e406f792a2b9677a6fbe:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGM5ZDllYjc0ZDcwMzg5YTg0NmIwNTc1NjE4OTdlZTdkOWQ1ZTk0Y2JmZGY5Y2VmODg3M2NiNTRmMGEyYzM5NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDdmYzM4Mjg4Mzk5MTY1NTNkZDI4NWZlNjE5MmU3ZDYyN2U4OGI0Yjg0ZTVhOWFhMWY4OGMyNTM1MzYzYWUxMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDJlNTUzMmE0YTU4YTliZDc4Nzk0YWE5NzdkYjFlZGU1MDA4OGNkZmQ5MzdjNTJkYzFjY2VlOGQ0MDZiYzdhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzc3ZDcwMmIwYTllYjZmMGY2ZjQyNzQyMWQyZjVkZGZjM2UzZDU1ZDMxZTFmYmI3ZTUzMjZhZDFlZDA5MTdkZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b043551d049c40ed9f72adc74d0860ec",
+      "statement": "The major tag (e.g., '2') tracks the current upstream Komodo major line, the minor tag (e.g., '2.0') tracks the current upstream Komodo minor line, and the patch tag (e.g., '2.0.0') matches the exact upstream Komodo Periphery release for reproducible deployments.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L140-L146",
+          "version": "repo-lines-v1:sha256:a76bbbec20751dc20cb17dcd587e06a20fd8b1ba04a9e406f792a2b9677a6fbe:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGM5ZDllYjc0ZDcwMzg5YTg0NmIwNTc1NjE4OTdlZTdkOWQ1ZTk0Y2JmZGY5Y2VmODg3M2NiNTRmMGEyYzM5NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDdmYzM4Mjg4Mzk5MTY1NTNkZDI4NWZlNjE5MmU3ZDYyN2U4OGI0Yjg0ZTVhOWFhMWY4OGMyNTM1MzYzYWUxMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDJlNTUzMmE0YTU4YTliZDc4Nzk0YWE5NzdkYjFlZGU1MDA4OGNkZmQ5MzdjNTJkYzFjY2VlOGQ0MDZiYzdhZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzc3ZDcwMmIwYTllYjZmMGY2ZjQyNzQyMWQyZjVkZGZjM2UzZDU1ZDMxZTFmYmI3ZTUzMjZhZDFlZDA5MTdkZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1ea5431e0607463d95a9567306d58510",
+      "statement": "To pull the image for tracking the current Komodo major line, use: docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L152-L154",
+          "version": "repo-lines-v1:sha256:5f8c0c2d96f3156e1d3802a7703b25b5ec3d66df4d1a47712a109f652d40f56a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRlMmY1MzI4ZWU2ZTgwNTBlOGFhZmQ4ZGM4NjlhMDY5Y2Q5NTg0ZWRhYWY1NGZlNTg5ZDczYzNiN2RjZDc5OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWJiNzFlMWQzMjExZjYxYTExYWNlMmI0NzhkYzQwNTA2MDkyMzcxYzRjYzQ3ZDQyOTYyMTQyODU5ZDQwZmJiMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWNhNmJiYjg1YzdjYjc2MDRiYjhhMTk5YWEzNjg0ZGEyMmM0YjYyZTcyMjMxOTQwZGNmM2E1ZTA1NjBlMTUwYSJ9"
+        },
+        {
+          "resource": "repo://README.md#L158-L160",
+          "version": "repo-lines-v1:sha256:0d024b59653c7e1c991f08b6d613b122c15a36c473ed4d7a2de106554f76f4ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRlMmY1MzI4ZWU2ZTgwNTBlOGFhZmQ4ZGM4NjlhMDY5Y2Q5NTg0ZWRhYWY1NGZlNTg5ZDczYzNiN2RjZDc5OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWNhNmJiYjg1YzdjYjc2MDRiYjhhMTk5YWEzNjg0ZGEyMmM0YjYyZTcyMjMxOTQwZGNmM2E1ZTA1NjBlMTUwYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTg5MTAxNzU2ZGI5ZWNiMGNjOTRmN2E5Nzk1MzdmMGU2NTVhNjVkYTQ0M2ZkYWVhYTVkY2U3ZTc2MzM1OTQ0MiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6e37ad8e427f4fc69ea201b04b0382ee",
+      "statement": "To pull the image for tracking the current Komodo minor line, use: docker pull ghcr.io/smoochy/komodo-periphery-sops-age:2.0",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L162-L164",
+          "version": "repo-lines-v1:sha256:d4a3efeaec45720eba2fae29903af39d4aeaf9af6c2a4b246562749e21511008:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRlMmY1MzI4ZWU2ZTgwNTBlOGFhZmQ4ZGM4NjlhMDY5Y2Q5NTg0ZWRhYWY1NGZlNTg5ZDczYzNiN2RjZDc5OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGFiM2RhMmVkMWI2YTQwNjEzYTgyYjIxNzBjY2RjODc1ZWI4OGFjNjdiNjFhN2IzNWM3NGJhOGVkOWJlMzg5NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjA2MWZjMWI4OWFlNzk1YjkzMGUzYmJkODEzMDEyYWZiOTYxNzYzNjJmZWY3NDEzNmQ5Nzg1ZTczMGFlMzE3MiJ9"
+        },
+        {
+          "resource": "repo://README.md#L166-L168",
+          "version": "repo-lines-v1:sha256:a358f9f15a1a6f0852d7953c0ffc702d56c914f13af9cff3fa69caa7a6fcd6dd:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRlMmY1MzI4ZWU2ZTgwNTBlOGFhZmQ4ZGM4NjlhMDY5Y2Q5NTg0ZWRhYWY1NGZlNTg5ZDczYzNiN2RjZDc5OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWNlOTRhYWZiNmEyNzkwMjRhOTA4MDM5MTM3NWVmYjhkOGM4NjAzMTY0OGZkOTAwNWVjYTk1YjM1MWMzMWZhNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDdmYjgwOTdlY2UzNjVmNTE3NmU2MmUzMzJmNTJhMmU4YjRjYWIzODBiZjI1NzdhYjBlOWI5Mjk4MGFiOWRmNiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b718e191a43c45a3b04e7100c1375650",
+      "statement": "To pull the image for an exact Komodo release (reproducible), use: docker pull ghcr.io/smoochy/komodo-periphery-sops-age:<x.y.z>",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L170-L178",
+          "version": "repo-lines-v1:sha256:59f41ceb6637427b2c51dd17d2329f00b350aa98f90e1fe868cde6664313fa04:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjhkY2IwOTIxMmE3ODM2MGM5NmNlMmI1ODY4MjM1Y2JjZGYwYjgwNmI2MjRmMzg1ODdlN2YyNGZkMzg0ZWM3MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDdjMDZjNTYxZDVjMzI3MzQzNjg1MjY4YTQ2YjMzOTFmMzk5OGVlZTg5MGQyYmU1MWYwZDIxY2M0YTUzYWU2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmMxZGEyYjg4ZWE4Mzk1YWEyYTE2YzU1YzI3OGFlZmU0N2E5OTA4OWQzNTg2Mzg5ZDE4NjcxMmVlMDU5ODY0MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDdmZDE4MTUxYTA1MzliODg0NmIxZjBkZDBhZmE4ZDQ5OWI3OTg0ZmZkMmM2NzRmZDQzZjVhOTc0M2FhMGM2MiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-04T09:25:18.613Z"
+  }
+}

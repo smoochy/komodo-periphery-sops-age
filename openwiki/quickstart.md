@@ -2,8 +2,18 @@
 type: Reference
 title: komodo-periphery-sops-age Documentation
 description: Entry point for the komodo-periphery-sops-age OpenWiki knowledge base. Covers repository purpose, key components, and navigation to detailed documentation.
-resource: file:///openwiki/quickstart.md
 tags: [quickstart, overview, navigation]
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
+sources:
+  - id: openwiki-source-7a80b79a6fb3618cbfab08a2
+    resource: repo://.github/workflows/build.yml
+  - id: openwiki-source-bb1ebe868e35e9e500714501
+    resource: repo://Dockerfile
+  - id: openwiki-source-23775c3de52f3ab95a13cb8b
+    resource: repo://README.md
+generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 ---
 
 # komodo-periphery-sops-age Documentation
@@ -19,8 +29,6 @@ This knowledge base documents the **komodo-periphery-sops-age** repository, whic
 | **Dockerfile Details** | [Dockerfile](architecture/dockerfile.md) | `Dockerfile` |
 | **Image Tags & Metadata** | [Image Metadata](reference/image-metadata.md) | `Dockerfile` (LABELs), `.github/workflows/build.yml` |
 | **Usage & Examples** | [Usage](usage/overview.md) | `README.md` |
-<!-- openwiki: broken internal link [operations/overview.md] file "operations/overview.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-| **Operations** | [Operations](operations/overview.md) | `.github/workflows/build.yml`, `.github/workflows/openwiki-update.yaml` |
 
 ## Repository Purpose
 

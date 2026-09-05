@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:3af68856fb157f6f85c75a080ea1092eb47b380c4ad4521924edc2657570fd15",
+  "claims": [
+    {
+      "id": "claim_f167f525aa0c4069bec9b12767a09ee7",
+      "statement": "The Dockerfile installs ca-certificates, curl, and tar using the appropriate package manager (apk for Alpine, apt-get for Debian/Ubuntu) to support diverse base images.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile#L6-L15",
+          "version": "repo-lines-v1:sha256:032b78181b9dc455f1317508178002efcacf6a063200c568534840b563928449:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NTRhOWE1OTllOTNiZmNmNjNhMTZjZmIwNTZiNzM0OWEzYmRiYzRlMGQ4MWUyZjZhYTBkMmVkMjVlZDMzMmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZTc2MDQyNmE4ZTNhODYwZGQxNTBlNmMxMTc4YmFhNmJmMTgyNGM1N2ZlODI3M2IwMmI0YTVjZTQ1M2FhNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkOTc0NjdkNzFlZjE5NzA4YmM0ZmNmNWU3NzU0NGI1MDM0Mzc1MjNjYWRlNjcyZmU2MThiYTAwYWRlMzcyNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEwMmYwYjBiODkyZmZiMGQwOTM4MGNkMzEyNWQ4ZDY2ZWYyMWY0ZmRjYjc2MTQ5MGE0NDgyM2FmOTIyNzc4ZTcifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.0",
+    "at": "2026-09-04T09:25:18.613Z"
+  }
+}
