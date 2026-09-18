@@ -4,9 +4,6 @@ title: Image Metadata & Tags
 description: Tagging strategy, OCI labels, version tracking, and base image correlation for komodo-periphery-sops-age published images.
 resource: file:///openwiki/reference/image-metadata.md
 tags: [reference, tags, labels, oci, versioning]
-verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-04T09:25:18.613Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml

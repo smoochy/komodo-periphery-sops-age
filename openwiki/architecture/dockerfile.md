@@ -1,15 +1,15 @@
 ---
 type: Architecture
-title: Dockerfile
-description: Dockerfile reference for komodo-periphery-sops-age, detailing base image, installation steps, build arguments, OCI labels, and multi-arch handling.
+title: Dockerfile Reference
+description: Line-by-line Dockerfile documentation covering base image, system dependencies, architecture-specific binary downloads, runtime verification, and OCI labels.
 tags: [architecture, dockerfile, docker, sops, age]
 verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-04T09:25:18.613Z
+  - by: openwiki/0.5.2
+    at: 2026-09-18T09:31:26.072Z
 sources:
   - id: openwiki-source-bb1ebe868e35e9e500714501
     resource: repo://Dockerfile
-generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
+generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
 ---
 
 # Dockerfile Reference
@@ -73,21 +73,26 @@ LABEL org.opencontainers.image.age.version="${AGE_VERSION}"
 ## Line-by-Line Analysis
 
 ### Base Image (line 2)
+
 ```dockerfile
 FROM ghcr.io/moghtech/komodo-periphery:2
 ```
+
 - Uses the **major channel 2** of Komodo Periphery
 - The workflow resolves the exact `x.y.z` tag at build time
 - Base digest/version recorded in labels for traceability
 
 ### User Switch (line 4)
+
 ```dockerfile
 USER root
 ```
+
 - Required for package installation and binary placement in `/usr/local/bin`
 - Base image may run as non-root; this elevates for build steps only
 
 ### System Dependencies (lines 6-15)
+
 ```dockerfile
 RUN set -eux; \
     if command -v apk >/dev/null 2>&1; then \
@@ -100,11 +105,15 @@ RUN set -eux; \
     update-ca-certificates || true; \
     fi
 ```
+
 - **Dual package manager support:** Works on Alpine (`apk`) and Debian/Ubuntu (`apt-get`) bases
+- **Why dual support exists:** The base image `ghcr.io/moghtech/komodo-periphery:2` may change its underlying distribution between releases. Using runtime detection (`command -v`) ensures the Dockerfile works regardless of whether the base is Alpine-based or Debian-based.
 - **Installs:** `ca-certificates` (TLS for downloads), `curl` (download), `tar` (extract age)
 - **Cleanup:** Removes apt cache; Alpine's `--no-cache` avoids cache buildup
+- **`update-ca-certificates`** ensures the downloaded binaries can verify TLS certificates from GitHub releases
 
 ### Build Arguments (lines 17-21)
+
 ```dockerfile
 ARG TARGETARCH
 ARG SOPS_VERSION
@@ -112,11 +121,20 @@ ARG AGE_VERSION
 ARG BASE_DIGEST=""
 ARG BASE_VERSION=""
 ```
-- **TARGETARCH:** Set by docker/build-push-action for multi-arch builds; defaults to `amd64` if not set (via `${TARGETARCH:-amd64}`).
-- **SOPS_VERSION** and **AGE_VERSION:** Injected by the build workflow to pin specific tool versions.
-- **BASE_DIGEST** and **BASE_VERSION:** Left empty by default; populated by the build workflow to record the base image's digest and version for traceability.
+
+| Argument | Source | Purpose |
+|----------|--------|---------|
+| `TARGETARCH` | `docker/build-push-action` (auto-set for multi-arch builds) | Determines which architecture-specific binaries to download |
+| `SOPS_VERSION` | Build workflow (resolved from GitHub releases) | Pins SOPS version |
+| `AGE_VERSION` | Build workflow (resolved from GitHub releases) | Pins age version |
+| `BASE_DIGEST` | Build workflow (from `crane digest`) | Records base image digest for traceability |
+| `BASE_VERSION` | Build workflow (resolved x.y.z tag) | Records base image version for traceability |
+
+- **`TARGETARCH`** is automatically set by Buildx for each platform (e.g., `amd64`, `arm64`). Defaults to `amd64` via `${TARGETARCH:-amd64}` for local single-arch builds.
+- **`BASE_DIGEST`** and **`BASE_VERSION`** default to empty strings; the build workflow populates them.
 
 ### Architecture Detection and Tool Installation (lines 23-43)
+
 ```dockerfile
 RUN set -eux; \
     arch="${TARGETARCH:-amd64}"; \
@@ -140,12 +158,22 @@ RUN set -eux; \
     sops --version --check-for-updates; \
     age --version
 ```
-- **Architecture mapping:** Converts `TARGETARCH` (e.g., `amd64`, `arm64`) to the asset naming used by SOPS and age.
-- **SOPS installation:** Downloads the pre-built binary for the detected architecture, makes it executable, and verifies it.
-- **age installation:** Downloads the tar.gz archive, extracts it, moves the `age` and `age-keygen` binaries to `/usr/local/bin`, and cleans up.
-- **Version check:** Runs `sops --version --check-for-updates` and `age --version` to confirm installation and note any available updates (non-fatal).
+
+#### Architecture Mapping Table
+
+| `TARGETARCH` | `sops_arch` | `age_arch` | SOPS Asset Pattern | age Asset Pattern |
+|--------------|-------------|------------|-------------------|-------------------|
+| `amd64` | `amd64` | `amd64` | `sops-vX.Y.Z.linux.amd64` | `age-vX.Y.Z-linux-amd64.tar.gz` |
+| `arm64` | `arm64` | `arm64` | `sops-vX.Y.Z.linux.arm64` | `age-vX.Y.Z-linux-arm64.tar.gz` |
+| (other) | — | — | **Fails build** | **Fails build** |
+
+- **Architecture mapping:** Converts `TARGETARCH` (e.g., `amd64`, `arm64`) to the asset naming used by SOPS and age. Both projects use identical naming for these two architectures.
+- **SOPS installation:** Downloads the pre-built binary for the detected architecture directly to `/usr/local/bin/sops`, makes it executable.
+- **age installation:** Downloads the tar.gz archive, extracts it to `/tmp`, moves both `age` and `age-keygen` binaries to `/usr/local/bin/`, then cleans up temporary files.
+- **Version check (verification step):** Runs `sops --version --check-for-updates` and `age --version` to confirm installation succeeded. The `--check-for-updates` flag on SOPS prints a non-fatal notice if a newer version exists; it does **not** fail the build. This step ensures the binaries are functional and reports their versions in build logs.
 
 ### OCI Labels (lines 45-49)
+
 ```dockerfile
 LABEL org.opencontainers.image.base.name="ghcr.io/moghtech/komodo-periphery:2"
 LABEL org.opencontainers.image.base.version="${BASE_VERSION}"
@@ -153,6 +181,27 @@ LABEL org.opencontainers.image.base.digest="${BASE_DIGEST}"
 LABEL org.opencontainers.image.sops.version="${SOPS_VERSION}"
 LABEL org.opencontainers.image.age.version="${AGE_VERSION}"
 ```
-- **base.name:** Notes the base image reference used.
-- **base.version** and **base.digest:** Record the exact version and digest of the base image (set at build time).
-- **sops.version** and **age.version:** Record the versions of the installed tools.
+
+- **`base.name`:** Notes the base image reference used (the major channel tag).
+- **`base.version`** and **`base.digest`:** Record the exact version and digest of the base image (set at build time from workflow outputs).
+- **`sops.version`** and **`age.version`:** Record the versions of the installed tools.
+- These labels are consumed by the build workflow for change detection (comparing current published labels vs. newly resolved versions).
+
+## Build Argument Flow
+
+The build arguments are supplied by the GitHub Actions workflow. See [Build System](../architecture/build-system.md) for how the workflow:
+
+1. Resolves the base image digest and version tag
+2. Fetches latest SOPS and age releases from GitHub
+3. Passes all values as `--build-arg` to `docker/build-push-action`
+4. Bakes them into OCI labels via the Dockerfile `LABEL` instructions
+
+## Multi-Architecture Support
+
+The Dockerfile is designed for multi-arch builds (`linux/amd64`, `linux/arm64`). The `TARGETARCH` build arg is automatically provided by Buildx for each platform. The case statement maps Docker's architecture identifiers to the asset naming conventions used by the upstream projects.
+
+## Related Pages
+
+- [Build System](../architecture/build-system.md) — How build args are supplied and versions selected
+- [Architecture Overview](../architecture/overview.md) — High-level component diagram
+- [Image Metadata & Tags](../reference/image-metadata.md) — Tagging strategy and OCI labels
