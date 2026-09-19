@@ -1,11 +1,11 @@
 ---
 type: Reference
 title: komodo-periphery-sops-age Documentation
-description: Entry point for the komodo-periphery-sops-age OpenWiki knowledge base. Covers repository purpose, key components, and navigation to detailed documentation.
+description: Entry point and task-routing map for the wiki. Routes readers to architecture, build system, image metadata, usage, operations, and workflows reference based on their goal.
 tags: [quickstart, overview, navigation]
 verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-04T09:25:18.613Z
+  - by: openwiki/0.5.2
+    at: 2026-09-18T09:31:26.072Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
@@ -13,22 +13,35 @@ sources:
     resource: repo://Dockerfile
   - id: openwiki-source-23775c3de52f3ab95a13cb8b
     resource: repo://README.md
-generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
+generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
 ---
 
 # komodo-periphery-sops-age Documentation
 
 This knowledge base documents the **komodo-periphery-sops-age** repository, which builds and publishes a custom Docker image based on `ghcr.io/moghtech/komodo-periphery:2` with [SOPS](https://github.com/getsops/sops) and [age](https://github.com/FiloSottile/age) preinstalled.
 
-## Quick Navigation
+## When to Read What
 
-| Area | Page | Key Source Files |
-|------|------|------------------|
-| **Architecture & Design** | [Architecture Overview](architecture/overview.md) | `Dockerfile`, `.github/workflows/build.yml` |
-| **Build System** | [Build System](architecture/build-system.md) | `.github/workflows/build.yml` |
-| **Dockerfile Details** | [Dockerfile](architecture/dockerfile.md) | `Dockerfile` |
-| **Image Tags & Metadata** | [Image Metadata](reference/image-metadata.md) | `Dockerfile` (LABELs), `.github/workflows/build.yml` |
-| **Usage & Examples** | [Usage](usage/overview.md) | `README.md` |
+| Your Goal | Start Here |
+|-----------|------------|
+| **Understand the system architecture** | [Architecture Overview](architecture/overview.md) |
+| **Learn how builds are triggered and versions selected** | [Build System](architecture/build-system.md) |
+| **Inspect Dockerfile line-by-line** | [Dockerfile Reference](architecture/dockerfile.md) |
+| **Find tag formats, OCI labels, version tracking** | [Image Metadata & Tags](reference/image-metadata.md) |
+| **Read about all GitHub Actions workflows** | [Workflows Reference](reference/workflows.md) |
+| **Pull, run, and verify the image** | [Usage Overview](usage/overview.md) |
+<!-- openwiki: broken internal link [operations/overview.md] file "operations/overview.md" does not exist. Fix the href or restore the target, then delete this comment. -->
+| **Trigger manual builds, troubleshoot, rotate secrets** | [Operations & Runbook](operations/overview.md) |
+
+## Quick Navigation by Domain
+
+| Domain | Pages | Key Source Files |
+|--------|-------|------------------|
+| **Architecture & Design** | [Architecture Overview](architecture/overview.md) • [Build System](architecture/build-system.md) • [Dockerfile](architecture/dockerfile.md) | `Dockerfile`, `.github/workflows/build.yml` |
+| **Reference** | [Image Metadata & Tags](reference/image-metadata.md) • [Workflows Reference](reference/workflows.md) | `Dockerfile` (LABELs), `.github/workflows/build.yml`, `.github/workflows/openwiki-update.yaml`, `.github/workflows/sync_dockerhub_description.yml` |
+| **Usage** | [Usage Overview](usage/overview.md) | `README.md` |
+<!-- openwiki: broken internal link [operations/overview.md] file "operations/overview.md" does not exist. Fix the href or restore the target, then delete this comment. -->
+| **Operations** | [Operations & Runbook](operations/overview.md) | `.github/workflows/build.yml`, `Dockerfile` |
 
 ## Repository Purpose
 
@@ -43,6 +56,7 @@ This project provides a maintained Docker image variant of Komodo Periphery with
 1. **Dockerfile** - Defines the image construction: base image, dependency installation, SOPS/age downloads, OCI labels
 2. **Build Workflow** (`.github/workflows/build.yml`) - Orchestrates version selection, upstream change detection, multi-arch build, and multi-registry publish
 3. **Wiki Update Workflow** (`.github/workflows/openwiki-update.yaml`) - Scheduled documentation refresh
+4. **Docker Hub Sync Workflow** (`.github/workflows/sync_dockerhub_description.yml`) - Keeps Docker Hub description in sync with README
 
 ## When Builds Run
 
@@ -79,6 +93,7 @@ docker run --rm ghcr.io/smoochy/komodo-periphery-sops-age:2 age --version
 | Modify installation logic | Dockerfile RUN steps | `Dockerfile` (lines 23-43) |
 | Add new registry | Build workflow registry setup | `.github/workflows/build.yml` (steps: registries, dockerhub_mirror) |
 | Adjust build triggers | Workflow `on:` section | `.github/workflows/build.yml` (lines 4-30) |
+| Update wiki content | Wiki update workflow | `.github/workflows/openwiki-update.yaml` |
 
 ---
 

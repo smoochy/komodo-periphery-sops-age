@@ -4,9 +4,6 @@ title: Usage Overview
 description: Installation, usage examples, and verification steps for the komodo-periphery-sops-age Docker image.
 resource: file:///openwiki/usage/overview.md
 tags: [usage, docker, sops, age, examples]
-verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-04T09:25:18.613Z
 sources:
   - id: openwiki-source-23775c3de52f3ab95a13cb8b
     resource: repo://README.md

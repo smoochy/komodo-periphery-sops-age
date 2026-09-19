@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:bfceee9ff01448d83c94112768032eef5686eb4e2dfd5b32c913b28e5e06195e",
+  "claims": [
+    {
+      "id": "claim_ac2489f382d8413b902dff4740b62022",
+      "statement": "The build workflow (.github/workflows/build.yml) triggers on push to main (Dockerfile*, .dockerignore, workflow file), pull_request to main (same paths), daily schedule at 03:00 UTC, and workflow_dispatch with optional force=true input",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L4-L30",
+          "version": "repo-lines-v1:sha256:c289e0fb85cc6d82005a55f3bb250926babea1f2354785773799213aacaaa79e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4MGJhZDUyOGVlMDJlYzUxOTAyNDFhODEwMGU0ODZkYjM0MGI1YzM2MGUzMDc1ZTYxZGE3ZWU5NmJlYjA4MTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlMjc0MjI0ZTk4Mjg4MWQ5ODFiOGFkZGZkZGM5ODgwYjJmMWQwNzgwMzE1ZDcwZDVkNTE5MWM3NWY5NWE1YjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f56ec0917762444b8d421c116210b174",
+      "statement": "The build workflow has permissions contents: read and packages: write for GHCR publishing",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L32-L35",
+          "version": "repo-lines-v1:sha256:840c5de8a6fe25c678465ee393f717350724c08b84574baeb0dc6ec3fb43b83f:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzUyNjI0N2VkZTAwNmU5YmRhYjljNjg1MDcyODQyNWQxYjQxNjZjYWY1Y2FjNTBjZjA5NTVjNDRkMjRjMWE4ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTllZTU4OGUyYjdmYzQ1NzUzMjU5ZDBiMmM5OWM3NzE3ZTViMzFkNDZkZjQwNTZlNzRjNzM4OGU1NGYxZGMzMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGQyNzhmMTk3ZmJmOGZkYjYxN2UxN2EzMmE3YjQyZGViN2Y4ZjNkZjM3Njg2NjBmMzhmNWQ4YmU1Mzc0ZmVhMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7e4bf26b9d7a44609559bffaacf78a85",
+      "statement": "The build workflow classifies local changes via git diff to detect image_inputs_changed (Dockerfile* or .dockerignore) and workflow_changed (.github/workflows/build.yml)",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L46-L87",
+          "version": "repo-lines-v1:sha256:bbad88268747d0223b70ae939a041a47a1fe350a5892fdc4be8e13d348ce0a80:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0MzU2NTg4NzliM2YxOTc5YzFiM2M4NDM0NjQwZmExYTMzN2U0MTMzMzg0M2Q3YzI1NGVjZDQ0ZWY0OTc3YmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2MGFkNjRhNzc2N2YyNmFjNDRhMjcxNzgwN2E4NjAzYzQ5ZmQxZTAwMDE1MWZhYzgzYjk1OWE4MDBlYjAzNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkzNzJmMDdmMTZlNTNiNDdjMjUzNjM0YTFiYTZhNTM0ZTZhMGYzMWQ5MDY2ZGM0YjFlZjcxY2E4YTVjZjhmMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1aa0a7b25ea64391b6e9ce9769c19274",
+      "statement": "The build workflow decides whether to build by resolving base image digest (ghcr.io/moghtech/komodo-periphery:2), periphery tag via OCI labels or tag scanning, SOPS and age versions via GitHub API, comparing against published image labels, and evaluating forced build conditions",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L129-L322",
+          "version": "repo-lines-v1:sha256:5f6e0273c2ea5b7059039fe5eedb9a083556901c106383696a4b681da0781d00:eyJzZWxlY3RlZExpbmVDb3VudCI6MTk0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkMDIzOTNkNGI0MDE2YjQ2ZjdmYjgxZWVhM2M2MjE4MzNlZjQ4NGNhNzgxZTE0NDUwNjg0OTA4NTZkN2VhMzQ0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1NDM5OTQ3ODljODFhNmRhZWNiMjFkMzllNjRmZmE5YjgwNmY3M2FhYjY0MzE0ODBhZmZmODMxNzExMTUwOWU5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MWY0M2YwNjQ1MmU0YWQzNDU4MTY0NzM2OTA2ZjU3N2YwY2FlZWI4MjFhOWRmZDZjOTM0OTAzNGFhNjNlMDJjIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiNzkyYjAzNmQ2ODRlMDkwZjI3OGViMGI2ZGZkZDQ4NDU3YTQ1MDYwY2E1ZWFlYjcxMjM5MjQ4NmI0YzUwYzhlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_c64025beba184466aa12f9fa2eccd2e9",
+      "statement": "The build workflow publishes three tags derived from the periphery version: major (X), minor (X.Y), patch (X.Y.Z)",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L181-L190",
+          "version": "repo-lines-v1:sha256:f842a38707ee9130df24cb6b41c8f0980be63003af74895085aef6de0581a088:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxZTU2ZTI4NGMzMzA2NjBkYzZiMjAwYTBkOWJjZjczNzcxYjRjMGJjYTQ1OWJkYmZjNDRhMDIyNTZlZTBkODEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0Mzk5NDc4OWM4MWE2ZGFlY2IyMWQzOWU2NGZmYTliODA2ZjczYWFiNjQzMTQ4MGFmZmY4MzE3MTExNTA5ZTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3ZGQ2MDMwOTYxYzY2ZWRhNmQ0NjE5MzJiOGFmNjEyNTZhZTI4M2ViNDNlZjZiOTkyZDQ1YWY4NDc5MmEwZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA5NGEwODE5OGMzNDAwZWNjMGZkOTU3YjZmY2RmMjNkZmU1NzA1Zjk5ZWU2OGI1MjQ4MGM5NDMyMzM1ZWNmM2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_18fc0cb2808345ecaf700c7af53e14d3",
+      "statement": "The build workflow mirrors images to Docker Hub via crane copy when DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets are configured",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L105-L126",
+          "version": "repo-lines-v1:sha256:f3ca679bd5064c384318d1671254c5855609866ba2e8474a7c1e77fc98ba7284:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMmI3YmIyMWJkOTVlZjJjZmRmN2I1OWEwNzkxYTk2Mjc3NTQ5YTM1MTRhODg3YTQ3MzFmMWUwOTgxNTcyNTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMzZWUwNTQ0MzQyYTdmMGQxODY0ZThkN2FhYjcyM2YwNzNlNzljNmMzMzRkNmIzM2QxNTFjMWE0NzYxZTRlMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ5NzdmMzc2OTZkODZmMTFmMDhjMzJjNTczOTQwMGZkN2ZlMTBjYjE1NmI0MDc1ZGVkN2I3ZTcxZmYxYmJlOTEifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L364-L388",
+          "version": "repo-lines-v1:sha256:fac36293eaa8a72552d61ec807afba4c34f859dafd7c6486ddf4a0319876a947:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0ZDg1MjdiOTM4YmJjZDI1N2QzNzhhZTA0YjdhZTAzN2I2ODJiYjc5MmE0MDRiNTI0NWI3YjBhMThjNTZmNWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4MTMzM2RmNjZkNTk1YzYyMjM3NDEyZTdkMTYwN2I1Y2ZiMDExNDdmMGYzYTlkYjdiN2FjNGU3MjljNDNkMjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5MTkxOTc0MTI1ZGY5ODJkNTA4M2RkZjhiODM0N2MwMTU5MjMxOWZmZmVhZmUwOTExMTA5ZjAyNTRhMjEwZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmNzk2MTQ3NmFiYzZjYmVlMjA2YjhiODkzZWMwMDczNDkxMDMxM2NjZGYzODlhOWE5N2E3MzI1NDg3NGJiZWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6d91d86545224e08b696816d709ee1f0",
+      "statement": "The openwiki-update.yaml workflow runs on a weekly Friday 05:00 UTC schedule gated by ISO week parity (even weeks only) and on workflow_dispatch",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yaml#L13-L35",
+          "version": "repo-lines-v1:sha256:d243407fb8467a3e19fb50992c3ad721cecc5e23245d9a7ecb5cd17f08103a85:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljMmM3OTczN2Y1NjI2YjQ3ZWI5Mjc4YTc5Y2Q2NzM5ZjE5NDNiNTVlOTlmNGFiNTQzYTgzNjUyOWRjM2Y3NTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkMjNjMjQ3Nzg0NTEwZDVjMjYxOGVkNzFkMzlkYjFkYTM4Yzc1YWJmMGQ2ODgwMGFhNTVkNmJiM2RmMjI5ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2N2ViMTZjYTg5YjEwZTRmMTY0YTBjNTA1ZGRhMmY3ZmRiNGU4MTY0NDAxYjA0NTQ2YzE3YTQ1NTBlODQyNmMifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yaml#L3-L6",
+          "version": "repo-lines-v1:sha256:01ce99451c85f572a1eacd50a917708cdb8b2b9d826f7e6ca4ee0bc7810d3c1f:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTk2ZGM0ODE0OWY1YTgzZDFlZDZkYmIzOWJiYzdlMmI5MDJhYTNkMzRkNmJkNWFlNGIyOTFiNjhkZjBjYTc5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjFjMDVmOTY2YjZkMjI3YTIyMjliNTAxZjQ1MzgzZDRjNzIzYzRhNTczM2ZmZjEwMzQ0ZDU1MGM2NGUyMjQ0NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzViMWYyNGU2MTgwNWVlMWE5YmM3ODA0N2UxZTRiM2Q4NjE1N2Q2ZTM3ZDhhYzBiY2JlYmQ1ZTY1ZTVlZjFhYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzk0NjJkNWYyYzIwN2U2YjRmODI4NDNkOTE1NGZmMGJiYWQwMzQzOTI0YjJjM2M0YmFiZDk5Yjg3Y2NkNGI4MiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7464cf60d1c43b5922c5fe4cdcb287a",
+      "statement": "The openwiki-update.yaml workflow uses a gate job to check ISO week parity, skipping the update job on odd weeks, while manual dispatch always runs",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yaml#L13-L35",
+          "version": "repo-lines-v1:sha256:d243407fb8467a3e19fb50992c3ad721cecc5e23245d9a7ecb5cd17f08103a85:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljMmM3OTczN2Y1NjI2YjQ3ZWI5Mjc4YTc5Y2Q2NzM5ZjE5NDNiNTVlOTlmNGFiNTQzYTgzNjUyOWRjM2Y3NTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkMjNjMjQ3Nzg0NTEwZDVjMjYxOGVkNzFkMzlkYjFkYTM4Yzc1YWJmMGQ2ODgwMGFhNTVkNmJiM2RmMjI5ZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2N2ViMTZjYTg5YjEwZTRmMTY0YTBjNTA1ZGRhMmY3ZmRiNGU4MTY0NDAxYjA0NTQ2YzE3YTQ1NTBlODQyNmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e0369fa890b4437bb6a2f0950d2bb198",
+      "statement": "The openwiki-update.yaml workflow selects candidate models from openrouter-model-list models-openwiki.json filtering for sanity_ok models, then iterates through them running openwiki code --update --print until one succeeds",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yaml#L55-L84",
+          "version": "repo-lines-v1:sha256:7288657723f5e04afe36582aff32a9f8885a31f9b1c78a899625d4980d81ea86:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0YmJlNDY1M2UzOGM2ZTIxOTBhMTNkYWUzMjI3NDcwMDUwNDEyNmQ0NzFlNzlmNDM1YzhkOTRiMDk0NjA3NDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxODdjZTRmMDJhYjRmY2Y3Y2Q4MTc2ODMxNTgzNDVjN2ZjNTI0OTc5MzEwMWMxYWVkNWM4NGMxNGViMjg3ZmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjMDE3NjkwYzA4YzhlMDA2ODA1ZGI0N2QwMzVmMWU1YTg5NmI1ZTkxNTc0Yzk5ZTE4NmYxZTRmZTc5YjUyYzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0YzMzMGZlYmE1N2U2MmJlYTMyNDJjMzRhNGY2YjZmMTRmZDY3MGI3OWFhNWE0MGQ5NzdjYTg3ZTNiZDk4YTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_59c0a089f1b74afb927ec10b59d78188",
+      "statement": "The openwiki-update.yaml workflow creates a PR via peter-evans/create-pull-request@v8 targeting the openwiki/update branch with commit message 'docs: update OpenWiki'",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yaml#L99-L110",
+          "version": "repo-lines-v1:sha256:3b28c00b4e9cdf34f4f5746fbc9d0ad254fe52ef2cf3e9782a9663b7513964a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxY2ZmNGFkMzNiYTkxYjE0OGUxYjFiODI5MGI4ZmZmMjdiMjAzZmFiZmVlNTg3MDI4MmRlMzY3MzgzYjFiZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQxOTEzNzMyNTgyYzNlNjAzNTkwNzg2Yzg2ODM2OTUxZmYzNWU5YjJkMGY4ZDMxMDY3ZDRmNGM4NzQzZGIyYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY0Nzc5NmQzMTczMmZiY2U4OTk4YTJmN2U3YjFiYjk3NTVjMjNlNTg1MDMyMGI5MDkzN2Q4MmMzZmQwZTYyYTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0feb40faacbd475d888eda96faeb05ea",
+      "statement": "The sync_dockerhub_description.yml workflow triggers on push to main affecting README.md, README.dockerhub.md, or the workflow file, and on workflow_dispatch",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/sync_dockerhub_description.yml#L3-L11",
+          "version": "repo-lines-v1:sha256:2766dc90a0f6cc2f63ff6c549976bff1a216dc10bbb4247c50358c3abaf43284:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTk2ZGM0ODE0OWY1YTgzZDFlZDZkYmIzOWJiYzdlMmI5MDJhYTNkMzRkNmJkNWFlNGIyOTFiNjhkZjBjYTc5YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YyZmE3M2YwNzA0ODlkOTcyNGEwMjlkZmI1MDJhYTA4ODUwN2QwODU3OWJiYmNjOTRlZDkzNWMxYTA1MzMxNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWQyZGM1MDc2NmI4MDU5MmNlZTNhM2I2MTkwMzk5NjIxN2ZhNDUxYjQ1Zjc4NTkyN2VmMDllNTFlNTc0M2VhYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2UyNzQyMjRlOTgyODgxZDk4MWI4YWRkZmRkYzk4ODBiMmYxZDA3ODAzMTVkNzBkNWQ1MTkxYzc1Zjk1YTViMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f261f083dfb44f35bf78466a4afbb262",
+      "statement": "The sync_dockerhub_description.yml workflow uses peter-evans/dockerhub-description@v5 to update Docker Hub repository description from README.dockerhub.md when DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets are configured",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/sync_dockerhub_description.yml#L23-L50",
+          "version": "repo-lines-v1:sha256:9a3b16eb11db81a31a56d31589919073dff012e8825415d54565b6a919efb532:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzYjMxZmQ4ZTRkOWU1ZDRkZDcxYWUwYjVkZDlhNDI2ZmUwODFmZTk0MmE4YjhhN2VlOGFjODEwMzNkMGJhYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwZjMxNDU4ZDBiODY0ZGFiZGQ1ZWQzMjQxYjBlZGYwY2YwMWRjYTZhZWE0YWJjMGE1YzExMTMxOGYxZTkwNjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjYjA4ZDhjYzg0MzAzNzIwYmMzYTU2ZGFjMWNjMjNiMDA0ZDllMmYwNTI2OWNiOGU1MWJiNmI1NTU1MmEyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzZjM4ZTM3YjY1OGJmMGZmOTAwYmYzYjliMWFmN2I2NjI4YmQxY2FjYzdjZDBhOTllNDQ3YjMyODA3Y2ZlMGUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.2",
+    "at": "2026-09-18T09:31:26.072Z"
+  }
+}

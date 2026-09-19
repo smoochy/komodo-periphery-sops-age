@@ -3,9 +3,6 @@ type: Architecture
 title: Architecture Overview
 description: High-level architecture of the komodo-periphery-sops-age Docker image, including base image dependency, tool installation flow, and multi-arch support.
 tags: [architecture, docker, komodo, sops, age]
-verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-04T09:25:18.613Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml

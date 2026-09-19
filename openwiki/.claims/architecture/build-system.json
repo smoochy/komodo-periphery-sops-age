@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a7c61d92d3ccac6f9ab5074385c8adaa54a690890a051961f3f8418863520aac",
+  "claims": [
+    {
+      "id": "claim_e11599572907409caf24c3bfbc3dc77e",
+      "statement": "The GitHub Actions workflow (.github/workflows/build.yml) orchestrates build, version selection, change detection, and multi-registry publishing for komodo-periphery-sops-age.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml",
+          "version": "repo-file-v1:sha256:598b94a36bfa4767099c6d0b9ee94ba032b86c90e5e68231ad34084a7126fe60"
+        }
+      ]
+    },
+    {
+      "id": "claim_1c550009622f491387e0ac8c5f51d57d",
+      "statement": "The workflow triggers on push to main (paths: Dockerfile*, .dockerignore, .github/workflows/build.yml), pull_request to main (same paths), schedule (daily 03:00 UTC), and workflow_dispatch with optional force=true input.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L4-L30",
+          "version": "repo-lines-v1:sha256:c289e0fb85cc6d82005a55f3bb250926babea1f2354785773799213aacaaa79e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4MGJhZDUyOGVlMDJlYzUxOTAyNDFhODEwMGU0ODZkYjM0MGI1YzM2MGUzMDc1ZTYxZGE3ZWU5NmJlYjA4MTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlMjc0MjI0ZTk4Mjg4MWQ5ODFiOGFkZGZkZGM5ODgwYjJmMWQwNzgwMzE1ZDcwZDVkNTE5MWM3NWY5NWE1YjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bc8ed4aa55524cfd90863375f4b6eb94",
+      "statement": "The local_changes step classifies whether triggering events modified image-relevant files by comparing git diff between base and head SHA, outputting image_inputs_changed and workflow_changed.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L46-L87",
+          "version": "repo-lines-v1:sha256:bbad88268747d0223b70ae939a041a47a1fe350a5892fdc4be8e13d348ce0a80:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0MzU2NTg4NzliM2YxOTc5YzFiM2M4NDM0NjQwZmExYTMzN2U0MTMzMzg0M2Q3YzI1NGVjZDQ0ZWY0OTc3YmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2MGFkNjRhNzc2N2YyNmFjNDRhMjcxNzgwN2E4NjAzYzQ5ZmQxZTAwMDE1MWZhYzgzYjk1OWE4MDBlYjAzNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkzNzJmMDdmMTZlNTNiNDdjMjUzNjM0YTFiYTZhNTM0ZTZhMGYzMWQ5MDY2ZGM0YjFlZjcxY2E4YTVjZjhmMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_31b871710b014803a5571583b662afc6",
+      "statement": "The decide step resolves the base image digest (ghcr.io/moghtech/komodo-periphery:2) via crane digest, then resolves the matching x.y.z periphery tag via OCI labels or tag scanning fallback.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L137-L179",
+          "version": "repo-lines-v1:sha256:52223585a3df793d310d97548adbbc2e4bf79ac986583f7caa2ebf903537bfda:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlNWI3M2VjOTEyMTU3ZDE0NTdjNDRhM2QyYTU1YmQzZWJmYjNmMTA1MTRlOGQwNjEwMWRkZWQ5NGRlNjRlMTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU4YjE3MmZhYzljOGQyZjgxOTc0MzNhMjFhZmEwY2M2OTc4N2NmYTU4NDAzNjdkNjU3MTVjMWUxMmE3OTY2YzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU0OGZhNDJjNTZlNTU1ZTQyMzE0ZDAxYzdhYWMyN2RjZjI3YmNiM2ZlZDMyOTIxNDY0ZWEwYjU4YzA1YjBjMzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_744f11efa3dc413cb3cbd29492996c98",
+      "statement": "The decide step fetches latest SOPS and age versions from GitHub releases API (getsops/sops and FiloSottile/age) using authenticated calls with GH_TOKEN.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L192-L199",
+          "version": "repo-lines-v1:sha256:b84873466e06c193a5a6c867cd7fb8be76cfcc0efa464cfce1d71ecb9c6de52a:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTY2ZGE3NDAxZGFmMGUwZDFjOTc5Y2NkNjFiZGQ5NDk0ODhkZWQyM2I1NjAzZWVlMzJjYWViMTAxYmY4MjliYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzI4MWViYTc3ZDljZmFjMWJlNTljMzQ5N2U1YjhlNzM5MDBhMDc4OGY5MjE5NDQzN2U2YWFmZjJkM2QxOTM0OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmFhMWNjODIwZjQ5MTdmNWQ2NDk0MGMzNzFmNWUxZjFlNGU4M2I4MDVlMDg5ZTc5N2U1NDNmYzA4MDVlOGE3NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGMyNDU1Mzc3YTA2MTM0YWFkNzk4YTI0MWQwZTRlYzI4MTUyZmFkYTU5ZGJlNGQwMzUzNTI5YjhhZWYxZTZjOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_748379f3abef42039fc419991fbf2aa2",
+      "statement": "The decide step reads current versions from published image OCI labels (base digest, base version, SOPS version, age version) if the image exists in GHCR.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L209-L229",
+          "version": "repo-lines-v1:sha256:9dc49c964a3dc7ed67abbee3c47f8ac69629d7fe51ca12e7fcd2f18e5c96c007:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0Y2M3ODg1M2NlZGU2MTY1MDIzYjE4OThlM2QwOGViYjMzMmJkNWMxNDg2NDZmZDVkMTE0MzhlM2U3ZjgxZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0Mzk5NDc4OWM4MWE2ZGFlY2IyMWQzOWU2NGZmYTliODA2ZjczYWFiNjQzMTQ4MGFmZmY4MzE3MTExNTA5ZTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmOGUzYmY1NmY5YWYyZTAyMDdiZGVjY2EzMmRhOGFlZTRmNmZjNTYwYWE4M2MyNTM4OWZhZjVjYWI0MzNiOGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMxZmJkNGZkMDI4NzYxNzI0ZjEwOTY5Yzc1YWYwYzQzYTc3OTg3ZjI3ZmM2NmE1OTU5MmExYmI5MDUxNDNiZmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_25f1201e0ca34f13bdca4c5b16afed1f",
+      "statement": "Change detection compares current vs selected versions: base digest change, SOPS version change, or age version change each trigger a rebuild.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L277-L290",
+          "version": "repo-lines-v1:sha256:be11a3f9ba35e02a70f886836d3e6b0a00da58456b913cfd0d0e160706e6781d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmZjYwYmY5MmZiY2MyNjY0MGQ0OWU5MDQwMjM3ODRjMmRjOGU1NzUzMjU5NjdhMzc0OTAwMmViZTZmZDAxMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxZjNkZjFjNTU4MGNkYjdmOTc0MmFjNjRkZDRhZDMzOTFhYWIwNjAwMjg2ZWYxNjdjZTBhOGQ0ZDBjYjM5YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MDllNzE4ODFlZDA0OTM5MTczM2I3NzQ5YTAzNTZlMzllMzU0YTNlYTVlMTAzNzFmMTIxZDVlN2YxZTkxMzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0327eebd32b846df97a7faa719ec76da",
+      "statement": "Forced build conditions: workflow_dispatch with force=true, pull_request with image_inputs_changed or workflow_changed, push with image_inputs_changed (workflow-only changes on push do not force build).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L231-L241",
+          "version": "repo-lines-v1:sha256:e98a6957339cbdd7b78a6fcdfb72e44f9a72dc849cb4983a8cc3cea7d62935d1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4NTQ1NDM1OTlmYTFmYTRhOTQ5ZTFjZDdmNjI0MWU2NTI1YWY3OTY1YmE5YmMyYmE2MzgxZDE5ZTZmMzZmMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkYzVmMDRmODEzZDc0YWRmYmYwMmU0OTY0YmY1MTAyNTRlMzU5YTQ2NzMxYzM2MzY4MzI4MzJkZGVlMTM4ZDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdhYzUzZjJjZmZjZGZlOTUxZWJlZjRhNDI3ODJhYTM2ZGFkNTcwYThhZjdjMmI1MmI0YjYxNWM4MDcxNjM1MmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7dd1b3ffedf34e5d97fbf14fb8a631cb",
+      "statement": "The workflow publishes three tags derived from the resolved periphery version: major (X), minor (X.Y), patch (X.Y.Z) to both GHCR and Docker Hub (when secrets configured).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L331-L334",
+          "version": "repo-lines-v1:sha256:b083f89ed0e918e59b513cbfa8c95b4ccb6e0a0b68fb20d108e59e8525344252:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODdmZjBkMjFiNjM4YTk1OTc0NzhlNjE2NDZhNWJhMmJlODc4MDExYTAwMjI5MDZmOTQ0ZjBmOTgyZjZjZmVmNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNhOTU1MjA2MGI4NDA2NGE2MjRlNDY3MDY0NDFlZTRlY2EwODEyZjAzMGVmMmQ4Y2RlNGU4ZTY3N2Y4ZGFjNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZmNzRhZTUxMjMzZGI4MGI5MWY4MmIwN2RhMDEyZWE4YThiN2MwNGE4MzI3NzRiOTFiODlhZTA5NzBkMmMzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmRjOGEwMzEwNWFkMDQzOWUxNWFlZDY4MTlmM2M5ODNmNWU4OGMzOGZhMzgzMTFhZjk0ZTk5NzNlNzdmNDM3ZCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L383-L388",
+          "version": "repo-lines-v1:sha256:60bb0c5cc738110ab6427ed3c1040746f77e0c4ef15277f28b78ea641cce0381:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY4MTlmMTE5MzY3MDUzODc4ZTc5NDhlYjgxNmM5YTgzOTkxNjUxNmM1ZTRlYjBkMmFjMGFhNWE0NjZjMjA2ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzgxMzMzZGY2NmQ1OTVjNjIyMzc0MTJlN2QxNjA3YjVjZmIwMTE0N2YwZjNhOWRiN2I3YWM0ZTcyOWM0M2QyMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZThiMTcyZmFjOWM4ZDJmODE5NzQzM2EyMWFmYTBjYzY5Nzg3Y2ZhNTg0MDM2N2Q2NTcxNWMxZTEyYTc5NjZjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmY3OTYxNDc2YWJjNmNiZWUyMDZiOGI4OTNlYzAwNzM0OTEwMzEzY2NkZjM4OWE5YTk3YTczMjU0ODc0YmJlZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_dced3bd4e977448d8f1625b0ef57cbcb",
+      "statement": "The multi-arch build uses docker/build-push-action@v7 for linux/amd64 and linux/arm64, passing BASE_DIGEST, BASE_VERSION, SOPS_VERSION, AGE_VERSION as build args and baking them into OCI labels.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L337-L362",
+          "version": "repo-lines-v1:sha256:3d683cbd3377b775111ea10e367ee8514771b98e7aabb4674b08bd0bc2c6416c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhNmZmODgxZTg2NGUwYjYxNTUyZDdiMDM0NDM2MzI4ZjFhZTQxY2U5YmQ2OTYyOTFlM2JiMzA1OGM1NTE1YjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNTJiZTEwNDQyNDU4MjBlOWRkNzg0ZmRiNjk2Yjk2YzZkNDgxYzAwMjY4NGYwNTVhODEyYWUzNzAxMDU0NDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyODQwOWU5N2IyZjZlYmQyN2UwN2U0M2I0MDMyNDk3MzhhOTczOGYxMWIwMGFkZTNhODVhZDNmZDVjMWY1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJmNTkxMDFhMWMyMWVjMTcyOGM5YmQ4NTU0MDI3NWVjYjA3MDA0YmUwNjZmZmVmOTQzYzMwYTg4ZWQ5YTg1NmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_970c07b3295345e98a2c5f18fba4650a",
+      "statement": "Docker Hub mirroring uses crane copy to replicate all three tags from GHCR to Docker Hub when DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets are set and not a pull request.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L364-L388",
+          "version": "repo-lines-v1:sha256:fac36293eaa8a72552d61ec807afba4c34f859dafd7c6486ddf4a0319876a947:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0ZDg1MjdiOTM4YmJjZDI1N2QzNzhhZTA0YjdhZTAzN2I2ODJiYjc5MmE0MDRiNTI0NWI3YjBhMThjNTZmNWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4MTMzM2RmNjZkNTk1YzYyMjM3NDEyZTdkMTYwN2I1Y2ZiMDExNDdmMGYzYTlkYjdiN2FjNGU3MjljNDNkMjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5MTkxOTc0MTI1ZGY5ODJkNTA4M2RkZjhiODM0N2MwMTU5MjMxOWZmZmVhZmUwOTExMTA5ZjAyNTRhMjEwZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmNzk2MTQ3NmFiYzZjYmVlMjA2YjhiODkzZWMwMDczNDkxMDMxM2NjZGYzODlhOWE5N2E3MzI1NDg3NGJiZWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_99ab88403581455dad0444c87135771d",
+      "statement": "The job summary always runs and writes publish reason, selected versions, current versions, image refs, and Docker Hub mirror status to GITHUB_STEP_SUMMARY.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L390-L418",
+          "version": "repo-lines-v1:sha256:ea1de4d8ec889680245e510988dc140bb20036140c037053972d809de1baeb17:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ5YjRiMjYwMTE2NWM2ZjU3N2Y1ODk0ZmUwMGVkOGNmYzM1OTRhYTAwZTMzZTUxOTk3ODczM2E5NGFjYjBmZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU3MmQzMWYyYTcxN2U5OTZhYTdlZWMwM2YwNzg0NTVmMjk4YmQwYTUxMjZjYTZiZjc2NTQ4MDU1ZDE4MzgyM2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNzliN2Q1OTc1YjlhYzU5MGFkZWYzODA3M2M3MjA1NWE1M2Q2YWYyM2UwNzhjNmViZWZjMDFlNzUyZTUzOWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.5.2",
+    "at": "2026-09-18T09:31:26.072Z"
+  }
+}
