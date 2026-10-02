@@ -3,13 +3,13 @@ type: Architecture
 title: Dockerfile Reference
 description: Line-by-line Dockerfile documentation covering base image, system dependencies, architecture-specific binary downloads, runtime verification, and OCI labels.
 tags: [architecture, dockerfile, docker, sops, age]
-verified:
-  - by: openwiki/0.5.2
-    at: 2026-09-18T09:31:26.072Z
 sources:
   - id: openwiki-source-bb1ebe868e35e9e500714501
     resource: repo://Dockerfile
 generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
+verified:
+  - by: openwiki/0.6.1
+    at: 2026-10-02T10:58:29.290Z
 ---
 
 # Dockerfile Reference

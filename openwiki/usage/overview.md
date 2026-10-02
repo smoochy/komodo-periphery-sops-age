@@ -8,6 +8,9 @@ sources:
   - id: openwiki-source-23775c3de52f3ab95a13cb8b
     resource: repo://README.md
 generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
 ---
 
 # Usage Overview

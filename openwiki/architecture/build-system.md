@@ -4,8 +4,8 @@ title: Build System
 description: GitHub Actions workflow for building, version selection, upstream change detection, and multi-registry publishing of komodo-periphery-sops-age.
 tags: [architecture, github-actions, build, ci-cd, docker]
 verified:
-  - by: openwiki/0.5.2
-    at: 2026-09-18T09:31:26.072Z
+  - by: openwiki/0.6.1
+    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
