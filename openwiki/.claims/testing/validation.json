@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:92334dd13c644380031732b457d3831ddd39cb00e87e1c183d6301b101ef0526",
+  "claims": [
+    {
+      "id": "claim_c6306208640d45febbe092d29a92e215",
+      "statement": "Change detection compares published OCI labels against newly resolved versions to determine if a rebuild is necessary",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L138-L144",
+          "version": "repo-lines-v1:sha256:2892d94e1254026e08de6038b4fa2a0bad5aeca633e2fc351eef07d5743ae7d9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjU3MTExNTY4YTc5MDYzOWZjNjM2NjhmZmE5MjFhYWFjMjljYzhmZDhlYzczZmU4MTM1N2ZkZGVkNzg2MTMyMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDE2NGZkZDQwYmJjOTNlZTk3Y2JmNGMwMTY4YjdjYWYyOWY3ODlkZDg1Nzg5YzExNmYyYjY2Y2Q4OTc4MzU0NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWIwMjgyNTRiN2JmOTdjNzZiNzFmZmIxN2JmZTQ5N2I2ZTY0ZTBhYzZlODExMmJmYzIyOGUxMDg4YTE3NGFiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzIwMWQ1NzdjZGQ3MzgyODk1ZDhlMGUxMjcxOGRjYTQ0YzUxZGMxMzEwNjcxMDNmNjUxYjI0YWEyMmIyYzExMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6d0d6d59ea454d5096fb996ae2fe9e88",
+      "statement": "Manual dispatch with force=true bypasses all change detection and forces a build regardless of upstream changes",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L58-L58",
+          "version": "repo-lines-v1:sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmM1NjgwNDgyYmUzM2MwZjUzZTc5NWQ3NTdjYmY3NGRkOWY2MDUzMzBiZTI3ZGQzN2EzOTNlZTlkNmQ1OGVjYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDEwZDE2NDgyMDg5MjkxMTEwNjE3MDY2ZGMzZWU4NTdiYjAxYWM2NThhOWNkNjBhZDkyMzZiNDk0YmQ4YmMwYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_923c9a01f39a4dc29f8753ee12ad9aae",
+      "statement": "Path filtering ensures that documentation-only changes (e.g., README.md) do not trigger builds",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L52-L52",
+          "version": "repo-lines-v1:sha256:86f50d85b0d1cf6da501300e83461c3f15c9cdea3532a569b8ca58688f32d990:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODZmNTBkODViMGQxY2Y2ZGE1MDEzMDBlODM0NjFjM2YxNWM5Y2RlYTM1MzJhNTY5YjhjYTU4Njg4ZjMyZDk5MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODZmNTBkODViMGQxY2Y2ZGE1MDEzMDBlODM0NjFjM2YxNWM5Y2RlYTM1MzJhNTY5YjhjYTU4Njg4ZjMyZDk5MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjdjNWM0NTk2OWEyNWRkNzlkYzZmNDM1NjhiYmE1MjE3ODEwZjcwMDA2YWFjNTViMzNiZjY1Njk4MTgzMTJmNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTk4YjMzY2Q3Yzg5MjRlZWU0ZDAxOTZlOTcwM2YxMWVkYTQ4NjhjZWY0MzUzYWNlYzc0MDk0OWFhZTdiMDlhNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4d5c0097bc44aff98ecc398b39fccae",
+      "statement": "do_build=true if and only if the build was forced OR upstream changes (base/SOPS/age) were detected",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L92-L92",
+          "version": "repo-lines-v1:sha256:ce729947479e185322804a9e735e0d4c189f322a8059a7a5f78ca447cd4545a0:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2U3Mjk5NDc0NzllMTg1MzIyODA0YTllNzM1ZTBkNGMxODlmMzIyYTgwNTlhN2E1Zjc4Y2E0NDdjZDQ1NDVhMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2U3Mjk5NDc0NzllMTg1MzIyODA0YTllNzM1ZTBkNGMxODlmMzIyYTgwNTlhN2E1Zjc4Y2E0NDdjZDQ1NDVhMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWJhOTQ4MGJjMTFjYzdiNTg4OTkzN2M2ZmI0YzA4Y2Y4ZDZiZDEyOTE1MzI1NzcyMTlmNDkxNTM0OWFkMzI1MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTc3MjA5YjQwMmFjMTRiNmIyNDAzMThmZmQyNzJlMTFmZjkxMjE0ZGJlM2ZkMDAyN2YyZDgxYjJmYWQzZDBhMyJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.1",
+    "at": "2026-10-02T10:58:29.290Z"
+  }
+}

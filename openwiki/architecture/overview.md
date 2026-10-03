@@ -9,6 +9,9 @@ sources:
   - id: openwiki-source-bb1ebe868e35e9e500714501
     resource: repo://Dockerfile
 generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
+verified:
+  - by: openwiki/0.6.1
+    at: 2026-10-02T10:58:29.290Z
 ---
 
 # Architecture Overview

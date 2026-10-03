@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a573b3f0b901308478cad50a7cfdcd8bdcbebf5bd28647f2d29306ce7faa2046",
+  "claims": [
+    {
+      "id": "claim_f1dbec9e8149428193bd1b779a4ffc56",
+      "statement": "A rebuild is triggered when the current base image digest (CURRENT_BASE_DIGEST) differs from the newly resolved base image digest (BASE_DIGEST), or when CURRENT_BASE_DIGEST is empty (no prior published image exists).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L126-L129",
+          "version": "repo-lines-v1:sha256:509d7a5f17434b24bee08b60438bd9dc9bcba2590220a00b0aa0109b3fa73d73:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmY1NTk3OWNlNzMwMjAzM2U2YjJmZDdkODhmNTM3YTNiOGUwOTFlYTMwNWM4MTFmZmExMjc0YmY1NzY0ZWE1ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDAyMzkzZDRiNDAxNmI0NmY3ZmI4MWVlYTNjNjIxODMzZWY0ODRjYTc4MWUxNDQ1MDY4NDkwODU2ZDdlYTM0NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDVmODA0YTdiY2U4ZTliMjcwYzhiN2MxMjFmYjFkYmJiMzJhNWJmYTYxYjVmNWQ0MTkwZGI2ODAzMTRlMGVjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzAxZTM3ZjFiMmY2NmNlNGE5NTk2ZDRiYjI2MzdiOTI2YzJkYzI0ZWFjNDFkN2JlOTc0NzRkNTAzYWU3NWE0OSJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L138-L141",
+          "version": "repo-lines-v1:sha256:009458e1e592abd69b077d84d246935a646b35a57dfd91613e3eb5a29b0e548a:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjU3MTExNTY4YTc5MDYzOWZjNjM2NjhmZmE5MjFhYWFjMjljYzhmZDhlYzczZmU4MTM1N2ZkZGVkNzg2MTMyMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2ZkOGIyZTE4ZmMwNDk1NjJkNDBhN2I4N2Y5YmRmMWZmMDU5Yjc2ZmQ1MjQ1MmQzYzY1OTdhY2Q5NTUzMmIyNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWIwMjgyNTRiN2JmOTdjNzZiNzFmZmIxN2JmZTQ5N2I2ZTY0ZTBhYzZlODExMmJmYzIyOGUxMDg4YTE3NGFiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWZjN2E2YTI0ZmI0NzVhZGEwMTAxMDg1MDdlMzAyMWJkMjZiNmRmOWI0NTJkYWY4MDVlODA3NDg1Y2U2NDNkYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ca9a34d1872144afb675c4352ed3bc01",
+      "statement": "A rebuild is triggered when the current SOPS version (CURRENT_SOPS_VERSION) differs from the newly resolved SOPS version (SOPS_VERSION).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L116-L119",
+          "version": "repo-lines-v1:sha256:2b798e8ed99650512f7bcc0980a99ea6838ca5b2052d195c7312b7c586346382:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGM3MGI2N2UzMzUxN2RmMWU2YjE0OGU5YmZjNzhhMzgzMTJhNmU3ZTZiYjU4YmFmZmI1NGM0OTU4MGUxNDBhYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzJmMjRhNDVjNjAwODdlN2JjZDIwMmMzNjRjNTViOGE1NmQ4NjY2ODk1MTdiZTI4NWVkM2VjMzcxOTY3MGYzNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZThiMTcyZmFjOWM4ZDJmODE5NzQzM2EyMWFmYTBjYzY5Nzg3Y2ZhNTg0MDM2N2Q2NTcxNWMxZTEyYTc5NjZjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmYyMTE5MjlkMzI0ZDJlZTRkZGZlZWU5YzdhMjZlYTUxYjFhOWE3Mzc2ZWJlZTZiYmY3MjM3OWNkM2M5MWU2OSJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L144-L148",
+          "version": "repo-lines-v1:sha256:7f85636903308e02442af2a73ef3b64bf96c52f088260d8b10ace75be32e7594:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDE2NGZkZDQwYmJjOTNlZTk3Y2JmNGMwMTY4YjdjYWYyOWY3ODlkZDg1Nzg5YzExNmYyYjY2Y2Q4OTc4MzU0NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjBkOWRlZmNlMzAyZjYyOTAxZjE1MTFjNmY4MDU4ODczZmUxODMwYjI5MmU4NGQ2ZGM4YzUyZGM1NjM0NWE2NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWY4ODE2M2Y2Nzg2NmQ1NWYzMGFkNTdlMzM3ZTMwZTY2ZmIzOWQxYjcwNDY5N2IyYTUwMWM0NGUxMWM4NzIzMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1153cfc823f54c6483c2955bfb74f39e",
+      "statement": "A rebuild is triggered when the current age version (CURRENT_AGE_VERSION) differs from the newly resolved age version (AGE_VERSION).",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L112-L117",
+          "version": "repo-lines-v1:sha256:c8186dfc2cdfc181f9c36585ccd58fa3bcc7649c270c3ff2a016d2cacba2a263:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzQwOTdhYWVlNTgzZGQxNDc0NjBhZTY3NjdhNDdlYzI3N2MwZDI5M2M1YWUwZGE4MWE2NDc5ZTM3MGI3ODFmOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGUyNDdjZjBiYTRhN2ExMDg5YTE4YWU1MmM2YzZiOGY1NWFmODViNDAwNTU4ODg2M2FlNmU2MDBiYzZjZGVmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTQ4ZThlOGM4NGRmODFjZDJkZWUzZDhlZjQ4YTJhNDc2NGU4YjMxMTVlNTg5ZmViMmI4NmU2MjA5NDVhOGFkMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODhkOWJlZDQwZDEyMDlhODhmM2ZjNGJkODRiY2FmOWU4Mzg0NWYyMTU1MTNkMTE1NDc3ODY4MGMwNzI4ZTkyNyJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L151-L155",
+          "version": "repo-lines-v1:sha256:8f28509bf3b3397a0d34fb8dde051dba7a380476965f7a20458ce732afd7a99a:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTU1YzhkYmM3NWM3ODc3NGE3NmZhY2VlYWQyMTNlY2U4MTc5Mzk4MjI5YWEyNDRjZGY3YTBhZTIxOTg2M2UxZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2I2NTdmZmYwM2VjMjkzZDA2ODVhNTI5ZmNlYTc5MDZmZDBiZjgxOGEzZTk3ODQ2NjFmYjgyYzU1MjVkMGFiYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDZlYTU1YWQ0M2FkZTE2ZDM4MzllNGIxODExNzg4ZDkwZjBhNTIzZThlOGRjOTY0YTAzNjMxYTZmZDc3ZGY0NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTFiNzQxZmQwOGRkODc3Yjg3NTExNWM3ZGMzMTIxNTg4NTFhOTUxODU0ZDUyNGNmYTIyNTJhYmE3MjVlNGY1MyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_60173930572745e586403db691ba4dba",
+      "statement": "The final build decision follows: if FORCED is \"true\" OR CHANGED is \"true\", then do_build=\"true\"; otherwise do_build=\"false\" with a reason noting no upstream changes detected.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L173-L178",
+          "version": "repo-lines-v1:sha256:9ff3b2225f16cd509e8e96dee47591ad1758f9bfa763830cd1d7821cb44d2a34:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDhmMjE4MWI5YjM0MDQ5NGM3OWNjMGI2Y2I1NTFiMmIyNjQ0MWJhZmUxNGVjNzdkOGM3NzcwMjIxYTYxYTRmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGNmYzZhZjE3OGU1NWM2NmE4OGEwZjk0ODQ4YzA3M2ZhZjJiMzBkNzQ5ZGY0ZGQ3OWY5Y2FkMDhjNWEyYWQzOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWM4NjM1MjlhN2Y1MDk5MmQwNDAyOGJiNzFhNzJhZTFkODlmZWYyOWFmMGQ5ZjBkNjQ5MDEyMTFkMWU4YWRkMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzdkNzMxYWI5YjNjNzYxZjEyZWRmZTIxZjBmODRmMGQ2NThkZjZiN2NkYzVmODhlZTkxZmIwNzcwOTFjOWNlMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_39e0d7c15ed14836a08f2e9592133bc6",
+      "statement": "The FORCED variable is set to \"true\" for workflow_dispatch with inputs.force=\"true\", for pull_request when image_inputs_changed or workflow_changed is true, and for push when image_inputs_changed is true.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L162-L166",
+          "version": "repo-lines-v1:sha256:c7760a72829c57d415a7e3443081d5a0ed355766c16c7b2dae0c39b022b4e9d3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFjNjNlZTk1ZDQ4Y2UwMTI2NzFkMzMxODJmYzg4YjI0MzRiMzQ2ZjNlNjUwYTQ4NjAzM2RjNzFiY2FlMzYyYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE5YTA2OTE2NzQxYTgxNjRiZjFmYTA0OGUyNjI1ZmU2MDZlNDNlODc3MWZkYThkYTE3ZDU4ZTMxZWE3MWM2OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzgzMzgwMDY5MGNiMzA0NzMzNTRiZGE5Zjk5MjdiZmVkODQ0MzVmMzA1ZTc0MjdmMDY0N2EyYTFiN2NjNzIwMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWEzM2JhYjBmMDMxNzQwMDM4YmI2NDY0ZGZiNjUxNDVmZmYyZjcwYTAxMmViYzZmMzAzMzg0MTNlY2E4OGIwYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_482e372e68eb46269cfd4890c4d77e0c",
+      "statement": "On push events, a workflow-only change (workflow_changed == true but image_inputs_changed == false) does not force a build unless upstream changes (base/SOPS/age) are also detected.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L168-L169",
+          "version": "repo-lines-v1:sha256:1b9d2434958c46fcc491a279e291c4d5ceab24703a37545ba6ddaa81ffba8eb7:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmIwYmMwYjRlZDQ3MTIyMTc4YjI1MWE4Y2EyMjY0MWJhN2YxOWE3MmQwMTcyZTk2YWQ3NDg3ZDMxNDc4Yzc0OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjQ5NjllZDEzNzRlYzZkOGZlNDgyNWYzNjMwYjFmNjZkZjcxNjViZGE5ZjkxM2ZjNzdhOTI0Yjk0NWEzMmE5MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjE5NDk3YjY5ZmNlYmM3MWQ0ZGZiNWExNDg4OTBjMWEwMTU1NmExNzgzNjgxMzI3Y2Y4MzIxMDc4Yzc0ODhmZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWM4NjM1MjlhN2Y1MDk5MmQwNDAyOGJiNzFhNzJhZTFkODlmZWYyOWFmMGQ5ZjBkNjQ5MDEyMTFkMWU4YWRkMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_954463adee56440b8a4ee7096620674e",
+      "statement": "The current base version (CURRENT_BASE_VERSION) is read from OCI labels org.opencontainers.image.base.version or org.opencontainers.image.base.tag of the previously published image, and compared against the freshly resolved BASE_VERSION from the base image's major channel digest.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L127-L129",
+          "version": "repo-lines-v1:sha256:d977f37696d86f11f08c32c5739400fd7fe10cb156b4075ded7b7e71ff1bbe91:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDAyMzkzZDRiNDAxNmI0NmY3ZmI4MWVlYTNjNjIxODMzZWY0ODRjYTc4MWUxNDQ1MDY4NDkwODU2ZDdlYTM0NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjczYmI4Nzc3MjJlNDg0MGFlM2U1ZGM5ODcxNzAwMjA4MzU0ZjQ0ZDg2NDQwNDMzMjc5OTI1ZTgzNjczOTQ5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzAxZTM3ZjFiMmY2NmNlNGE5NTk2ZDRiYjI2MzdiOTI2YzJkYzI0ZWFjNDFkN2JlOTc0NzRkNTAzYWU3NWE0OSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_84119f0972e642d49a0b7114bd333435",
+      "statement": "The current SOPS and age versions are read from their respective OCI labels (org.opencontainers.image.sops.version and org.opencontainers.image.age.version) of the previously published image.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L128-L129",
+          "version": "repo-lines-v1:sha256:d55daab448b8368c55ef4320648ecd2164143abb1935e63b6e05c739a12a9110:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDAyMzkzZDRiNDAxNmI0NmY3ZmI4MWVlYTNjNjIxODMzZWY0ODRjYTc4MWUxNDQ1MDY4NDkwODU2ZDdlYTM0NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTA1Mjk0ZDhjMTA5MWM0MGU0OGE3OTUzOWFkNzI4MzFiZWEzZDdjOWE4NTVjNmIzYTJkNmYwYjM4OGY2NzFjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzAxZTM3ZjFiMmY2NmNlNGE5NTk2ZDRiYjI2MzdiOTI2YzJkYzI0ZWFjNDFkN2JlOTc0NzRkNTAzYWU3NWE0OSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.1",
+    "at": "2026-10-02T10:58:29.290Z"
+  }
+}

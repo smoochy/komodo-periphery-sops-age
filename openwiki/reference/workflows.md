@@ -12,7 +12,7 @@ sources:
     resource: repo://.github/workflows/openwiki-update.yaml
   - id: openwiki-source-ef9220e7890ed77ce753b739
     resource: repo://.github/workflows/sync_dockerhub_description.yml
-generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
+generated: { by: "openwiki/0.6.1", at: "2026-10-02T10:58:29.290Z" }
 ---
 
 
@@ -288,6 +288,9 @@ Minimal read-only access; Docker Hub auth via secrets.
 
 ## Related Documentation
 
+<!-- openwiki: broken internal link [/openwiki/architecture/build-system.md] link "/openwiki/architecture/build-system.md" is root-absolute, which no real consumer resolves against the repository root (not a coding agent reading the page, not GitHub's Markdown renderer, not a local viewer); use a path relative to this file instead. Fix the href or restore the target, then delete this comment. -->
 - [Build System Architecture](/openwiki/architecture/build-system.md) — Deep dive on build workflow internals
+<!-- openwiki: broken internal link [/openwiki/quickstart.md] link "/openwiki/quickstart.md" is root-absolute, which no real consumer resolves against the repository root (not a coding agent reading the page, not GitHub's Markdown renderer, not a local viewer); use a path relative to this file instead. Fix the href or restore the target, then delete this comment. -->
 - [Quickstart](/openwiki/quickstart.md) — Repository overview and navigation
+<!-- openwiki: broken internal link [/openwiki/reference/image-metadata.md] link "/openwiki/reference/image-metadata.md" is root-absolute, which no real consumer resolves against the repository root (not a coding agent reading the page, not GitHub's Markdown renderer, not a local viewer); use a path relative to this file instead. Fix the href or restore the target, then delete this comment. -->
 - [Image Metadata Reference](/openwiki/reference/image-metadata.md) — OCI labels and tag scheme

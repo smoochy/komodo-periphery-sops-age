@@ -8,6 +8,9 @@ sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
 generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-04T09:25:18.613Z
 ---
 
 # Image Metadata & Tags

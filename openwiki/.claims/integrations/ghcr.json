@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:5d424a20003492988738d9912c964193ed4a86a83a3671e6394fa019b885190d",
+  "claims": [
+    {
+      "id": "claim_f25dd92dde534e3fbec49f42f9d75e14",
+      "statement": "The build workflow publishes the komodo-periphery-sops-age image to GHCR at ghcr.io/smoochy/komodo-periphery-sops-age with three tags (major, minor, patch) and mirrors all three to Docker Hub when DOCKERHUB_USERNAME and DOCKERHUB_TOKEN secrets are configured.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml",
+          "version": "repo-file-v1:sha256:598b94a36bfa4767099c6d0b9ee94ba032b86c90e5e68231ad34084a7126fe60"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.1",
+    "at": "2026-10-02T10:58:29.290Z"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:1105583b2e382126298ddc49a4817d6dfe5c8f0543098ee451d4d165eb7f6cb7",
+  "claims": [
+    {
+      "id": "claim_d5e706d0bafe4198ad947ba86b37bb34",
+      "statement": "`README.dockerhub.md` is the source of truth for the Docker Hub repository description, and the sync workflow (`sync_dockerhub_description.yml`) uses this file to update the Docker Hub repository description.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/sync_dockerhub_description.yml",
+          "version": "repo-file-v1:sha256:d9273604f8ca548cd54a7498ef8c43f0a44bf4eab677ad9ea74afef8b3d2d33a"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.1",
+    "at": "2026-10-02T10:58:29.290Z"
+  }
+}

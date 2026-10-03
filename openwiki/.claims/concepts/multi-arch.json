@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:daa9a2d98f561dc8a380edad8a5cb6c86b457b2b767026d429f0bdda34a39212",
+  "claims": [
+    {
+      "id": "claim_05b2eaabe4cd4dd6af7fd333f585aabf",
+      "statement": "For target linux/amd64, SOPS and age binaries are downloaded as amd64 variants; for linux/arm64, they are downloaded as arm64 variants. The mapping is amd64→sops/age amd64, arm64→sops/age arm64.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/build.yml#L208-L208",
+          "version": "repo-lines-v1:sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTllNjU3ZjU0YzkzZjI0ZjcyOGIyODUyMTU0ZTQzMjVhYjVkYTVmZDIyMWU0YTg3NGQ0NDdhYWE5ZGE4M2M3MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWI2OTk5N2M3ZjhiZTU1MjA2ZWI0MTE4YTZmODBmNzI3NmUxM2M0MThlMGQyNGUyODgwYjBjNDQwZmVjZTRkOCJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L343-L343",
+          "version": "repo-lines-v1:sha256:f1e8f117e789696bbd0a1e00fe408c3e3d28ff7da8f04f4b01e8402beb801578:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjFlOGYxMTdlNzg5Njk2YmJkMGExZTAwZmU0MDhjM2UzZDI4ZmY3ZGE4ZjA0ZjRiMDFlODQwMmJlYjgwMTU3OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjFlOGYxMTdlNzg5Njk2YmJkMGExZTAwZmU0MDhjM2UzZDI4ZmY3ZGE4ZjA0ZjRiMDFlODQwMmJlYjgwMTU3OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2U0ZjQ4NTU1MDljYjhmMTA4ZTg0M2I4YjU5MmRkYjVhZjlhMGQ1ZTg4Y2JlMGU4MTZjYjkzMzZkYWU1MDhlNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjczZmZmOTA2ZWU5Y2M2MzY0YTBhZGJjNDFjMWMyOTZiOTBmNmQ4NDI5ZWNlYzYyYjNlYmM3ZDUyZDQyNTY2MSJ9"
+        },
+        {
+          "resource": "repo://Dockerfile#L25-L29",
+          "version": "repo-lines-v1:sha256:5246464eb9b629ff3e7c10fab05b593f97c660a32891b6f05f1c2eb7fa29f3c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODk2YjVlMjA2ZGI1NzFiNTU4OTlmM2YzM2IwZmRiNGUyYzMzMDEyZDZkNzJhY2RiMTFjZDY4YTRjMWM4M2E0NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTg5YzcwNzFjYzdhNzRmNWU5NGZiY2FhZmY0ZGY0Y2UxMTZjOTk2ODMxMjkwNTg4YzQyNmM0Nzc5YjQ1ZGUwMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzRlNjBhMjI1ZGFkODQ5NDJkNGM5YjVmZTNjYzJjYWYwZDllMzI0MDQ2MjMzNWRmYWZiYWM3YWY3ZmE3ZDVhOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWFlMmZkMWVjNDMyYjJlNzIzY2M1YmMwY2RlMzc4ZGFkMTYyNmYwODg3NWY2NWVhZjlmNDUzMzM4M2Y5ZTMwMCJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.1",
+    "at": "2026-10-02T10:58:29.290Z"
+  }
+}
