@@ -72,6 +72,10 @@ jobs:
           )
           # A bare #NNNN with no owner/name prefix (no slash, no owner, right before it).
           _BARE_NUMBER_RE = re.compile(r"(?<![\w/])#(\d+)\b")
+          # Unified-diff file header lines carry a/<path> and b/<path>, which match the
+          # owner/name shape. They name files, never repositories, so they are blanked
+          # before extraction.
+          _DIFF_HEADER_RE = re.compile(r"^(?:diff --git |--- |\+\+\+ ).*$", re.MULTILINE)
 
 
           @dataclass(frozen=True)
@@ -89,6 +93,7 @@ jobs:
               then a URL) is removed before the lower-priority patterns run, so the same
               characters are never reported twice under two shapes.
               """
+              text = _DIFF_HEADER_RE.sub("", text)
               references: list[Reference] = []
               consumed: list[tuple[int, int]] = []
 
