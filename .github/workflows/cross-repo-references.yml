@@ -1,0 +1,217 @@
+# managed centrally - do not edit manually
+name: cross-repo-references
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  cross-repo-references:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Write checker
+        run: |
+          cat > /tmp/cross_repo_reference_check.py <<'PYEOF'
+          """Refuse a push or pull request that references a non-public repository.
+
+          This file is the payload distributed into every public repository's
+          `.github/workflows/cross-repo-references.yml` (see `build_cross_repo_reference_workflow`
+          in `apply_baseline.py`), where it runs against a pull request's diff and commit
+          messages. It carries a method, not a list: nothing in this file, its tests, or
+          its generated workflow may name a specific non-public repository, because the
+          file itself lands in a public repository and is readable by anyone.
+
+          Three reference shapes are extracted from free text:
+            - `owner/name#NNNN`            - an explicit cross-repo issue/PR reference
+            - `https://github.com/owner/name/...` - a full URL
+            - `owner/name` on its own      - a bare repository reference
+
+          Each resolves through the GitHub API to a visibility check: public passes,
+          anything else (private, nonexistent, or a lookup that failed) is refused.
+          Lookup failures fail closed on purpose - an API hiccup must never read as "ok
+          to merge".
+
+          A fourth shape, a bare `#NNNN` with no owner/name, carries no repository name
+          at all. It cannot be resolved through visibility, so the rule for it is
+          different: refused when no issue or pull request of that number exists in the
+          repository the check is running against. That is the shape most local-issue
+          references accidentally take when someone copies a reference across repos.
+          """
+
+          from __future__ import annotations
+
+          import json
+          import re
+          import sys
+          import urllib.error
+          import urllib.request
+          from dataclasses import dataclass
+
+          GITHUB_API = "https://api.github.com"
+
+          # owner/name#NNNN - matched first so its owner/name does not also fall through
+          # to the bare owner/name pattern below.
+          _OWNER_NAME_ISSUE_RE = re.compile(
+              r"(?<![\w/])([A-Za-z0-9][A-Za-z0-9_-]*)/([A-Za-z0-9._-]+)#(\d+)"
+          )
+          # A full github.com URL to a repo (optionally with a deeper path, e.g. /issues/12).
+          _URL_RE = re.compile(
+              r"https?://github\.com/([A-Za-z0-9][A-Za-z0-9_-]*)/([A-Za-z0-9._-]+)(?:/[^\s)>\]]*)?"
+          )
+          # A bare owner/name with nothing attached - e.g. mentioned in prose.
+          # ponytail: a regex heuristic, not a parser - it can false-positive on a
+          # path-shaped token that is not a repo slug (e.g. "a/b" in a file path).
+          # Upgrade path if that bites: resolve only tokens whose owner segment is a
+          # known GitHub account/org, via a short allowlist of owners this fleet uses.
+          _BARE_OWNER_NAME_RE = re.compile(
+              r"(?<![\w/])([A-Za-z0-9][A-Za-z0-9_-]*)/([A-Za-z0-9._-]+)(?![\w/#])"
+          )
+          # A bare #NNNN with no owner/name prefix (no slash, no owner, right before it).
+          _BARE_NUMBER_RE = re.compile(r"(?<![\w/])#(\d+)\b")
+
+
+          @dataclass(frozen=True)
+          class Reference:
+              raw: str
+              owner: str | None
+              name: str | None
+              number: int | None
+
+
+          def extract_references(text: str) -> list[Reference]:
+              """Pull every cross-repo reference shape out of `text`, in priority order.
+
+              A span already consumed by a higher-priority pattern (owner/name#NNNN,
+              then a URL) is removed before the lower-priority patterns run, so the same
+              characters are never reported twice under two shapes.
+              """
+              references: list[Reference] = []
+              consumed: list[tuple[int, int]] = []
+
+              def _take(pattern: re.Pattern[str], build) -> None:
+                  for match in pattern.finditer(text):
+                      span = match.span()
+                      if any(span[0] < end and start < span[1] for start, end in consumed):
+                          continue
+                      consumed.append(span)
+                      references.append(build(match))
+
+              _take(
+                  _OWNER_NAME_ISSUE_RE,
+                  lambda m: Reference(m.group(0), m.group(1), m.group(2), int(m.group(3))),
+              )
+              _take(_URL_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
+              _take(_BARE_OWNER_NAME_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
+              _take(_BARE_NUMBER_RE, lambda m: Reference(m.group(0), None, None, int(m.group(1))))
+
+              return references
+
+
+          def _api_get(path: str, token: str | None) -> tuple[int, dict | None]:
+              """Return (status_code, decoded_json_or_None). Never raises for a normal HTTP error."""
+              request = urllib.request.Request(f"{GITHUB_API}/{path}")
+              request.add_header("Accept", "application/vnd.github+json")
+              if token:
+                  request.add_header("Authorization", f"Bearer {token}")
+              try:
+                  with urllib.request.urlopen(request, timeout=15) as response:
+                      return response.status, json.loads(response.read().decode("utf-8"))
+              except urllib.error.HTTPError as exc:
+                  return exc.code, None
+              except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+                  return 0, None
+
+
+          def repo_is_public(owner: str, name: str, token: str | None) -> bool | None:
+              """True/False on a real answer, None when the lookup itself failed (fail closed)."""
+              status, data = _api_get(f"repos/{owner}/{name}", token)
+              if status == 200 and data is not None:
+                  return data.get("private") is False
+              if status == 404:
+                  return False  # doesn't exist, or exists and is hidden from us - either way, refuse.
+              return None  # transient failure, rate limit, etc. - unresolved, fail closed.
+
+
+          def issue_or_pr_exists(repo: str, number: int, token: str | None) -> bool | None:
+              """True/False on a real answer, None when the lookup itself failed (fail closed).
+
+              `issues/{number}` on GitHub's API covers both issues and pull requests.
+              """
+              status, data = _api_get(f"repos/{repo}/issues/{number}", token)
+              if status == 200 and data is not None:
+                  return True
+              if status == 404:
+                  return False
+              return None
+
+
+          @dataclass(frozen=True)
+          class Violation:
+              raw: str
+              reason: str
+
+
+          def evaluate(text: str, this_repo: str, token: str | None) -> list[Violation]:
+              """Return every reference in `text` that must be refused. Empty means clean."""
+              violations: list[Violation] = []
+              for ref in extract_references(text):
+                  if ref.owner is not None and ref.name is not None:
+                      public = repo_is_public(ref.owner, ref.name, token)
+                      if public is True:
+                          continue
+                      reason = "lookup failed" if public is None else "not a public repository"
+                      violations.append(Violation(ref.raw, reason))
+                  elif ref.number is not None:
+                      exists = issue_or_pr_exists(this_repo, ref.number, token)
+                      if exists is True:
+                          continue
+                      reason = "lookup failed" if exists is None else "no issue or pull request of that number exists here"
+                      violations.append(Violation(ref.raw, reason))
+              return violations
+
+
+          def main(argv: list[str]) -> int:
+              import os
+
+              if len(argv) < 2:
+                  print("usage: cross_repo_reference_check.py <text-file> [<text-file> ...]", file=sys.stderr)
+                  return 2
+
+              repo = os.environ.get("GITHUB_REPOSITORY", "")
+              token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+              if not repo:
+                  print("GITHUB_REPOSITORY is not set - cannot resolve bare #NNNN references", file=sys.stderr)
+                  return 2
+
+              all_violations: list[Violation] = []
+              for path in argv[1:]:
+                  with open(path, "r", encoding="utf-8", errors="replace") as handle:
+                      text = handle.read()
+                  all_violations.extend(evaluate(text, repo, token))
+
+              if not all_violations:
+                  print("cross-repo-references: no disallowed references found")
+                  return 0
+
+              print("cross-repo-references: refusing the following reference(s):", file=sys.stderr)
+              for violation in all_violations:
+                  print(f"  {violation.raw}: {violation.reason}", file=sys.stderr)
+              return 1
+
+
+          if __name__ == "__main__":
+              raise SystemExit(main(sys.argv))
+          PYEOF
+      - name: Collect diff and commit messages
+        run: |
+          git diff "origin/${{ github.event.pull_request.base.ref }}...HEAD" > /tmp/diff.txt
+          git log "origin/${{ github.event.pull_request.base.ref }}..HEAD" --format=%B > /tmp/commits.txt
+      - name: Run checker
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 /tmp/cross_repo_reference_check.py /tmp/diff.txt /tmp/commits.txt
