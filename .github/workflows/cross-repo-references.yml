@@ -80,6 +80,15 @@ jobs:
           # owner/name shape. They name files, never repositories, so they are blanked
           # before extraction.
           _DIFF_HEADER_RE = re.compile(r"^(?:diff --git |--- |\+\+\+ ).*$", re.MULTILINE)
+          _DIFF_MARKER_RE = re.compile(r"^diff --git ", re.MULTILINE)
+          # A CSS declaration (`--void: #030304;`, `color: #fff}`) whose value holds an
+          # all-digit hex colour of 3, 4, 6 or 8 digits. Group 1 is the colour; it is not
+          # an issue number. The declaration must end in `;` or `}` so prose such as
+          # `Note: #1234` is still checked.
+          _CSS_HEX_DECLARATION_RE = re.compile(
+              r"[\w-]+\s*:\s*[^;{}\n]*?(?<![\w/])#(?:\d{3,4}|\d{6}|\d{8})\b[^;{}\n]*[;}]"
+          )
+          _CSS_HEX_TOKEN_RE = re.compile(r"(?<![\w/])#(?:\d{3,4}|\d{6}|\d{8})\b")
 
 
           @dataclass(frozen=True)
@@ -107,13 +116,27 @@ jobs:
               """
               if bare_owners is None:
                   bare_owners = fleet_owners()
+              if _DIFF_MARKER_RE.search(text):
+                  # Only added lines can introduce a reference; removed and context lines
+                  # (and the file headers) cannot. Commit messages carry no `diff --git`
+                  # line, so their `-` bullets are untouched.
+                  text = "\n".join(
+                      line[1:] for line in text.splitlines() if line.startswith("+") and not line.startswith("+++ ")
+                  )
               text = _DIFF_HEADER_RE.sub("", text)
+              css_hex = {
+                  decl.start() + token.start()
+                  for decl in _CSS_HEX_DECLARATION_RE.finditer(text)
+                  for token in _CSS_HEX_TOKEN_RE.finditer(decl.group(0))
+              }
               references: list[Reference] = []
               consumed: list[tuple[int, int]] = []
 
-              def _take(pattern: re.Pattern[str], build, owners: frozenset[str] = frozenset()) -> None:
+              def _take(pattern: re.Pattern[str], build, owners: frozenset[str] = frozenset(), skip=()) -> None:
                   for match in pattern.finditer(text):
                       if owners and match.group(1).lower() not in owners:
+                          continue
+                      if match.start() in skip:
                           continue
                       span = match.span()
                       if any(span[0] < end and start < span[1] for start, end in consumed):
@@ -127,7 +150,7 @@ jobs:
               )
               _take(_URL_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
               _take(_BARE_OWNER_NAME_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None), bare_owners)
-              _take(_BARE_NUMBER_RE, lambda m: Reference(m.group(0), None, None, int(m.group(1))))
+              _take(_BARE_NUMBER_RE, lambda m: Reference(m.group(0), None, None, int(m.group(1))), skip=css_hex)
 
               return references
 
