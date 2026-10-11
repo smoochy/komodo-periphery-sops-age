@@ -28,7 +28,13 @@ jobs:
           Three reference shapes are extracted from free text:
             - `owner/name#NNNN`            - an explicit cross-repo issue/PR reference
             - `https://github.com/owner/name/...` - a full URL
-            - `owner/name` on its own      - a bare repository reference
+            - `owner/name` on its own      - a bare repository reference, only when
+              `owner` is one of the owners listed in the `CROSS_REPO_OWNERS` environment
+              variable (comma separated, case-insensitive). Branch names and file paths
+              have the same shape (`feature/x`, `scripts/tool.py`) and are indistinguishable
+              from a repository slug without an owner filter. The owner list is injected by
+              the distributor, never written in this file. Unset or empty means every owner
+              is a candidate (fail closed).
 
           Each resolves through the GitHub API to a visibility check: public passes,
           anything else (private, nonexistent, or a lookup that failed) is refused.
@@ -45,6 +51,7 @@ jobs:
           from __future__ import annotations
 
           import json
+          import os
           import re
           import sys
           import urllib.error
@@ -63,10 +70,7 @@ jobs:
               r"https?://github\.com/([A-Za-z0-9][A-Za-z0-9_-]*)/([A-Za-z0-9._-]+)(?:/[^\s)>\]]*)?"
           )
           # A bare owner/name with nothing attached - e.g. mentioned in prose.
-          # ponytail: a regex heuristic, not a parser - it can false-positive on a
-          # path-shaped token that is not a repo slug (e.g. "a/b" in a file path).
-          # Upgrade path if that bites: resolve only tokens whose owner segment is a
-          # known GitHub account/org, via a short allowlist of owners this fleet uses.
+          # Filtered by owner in extract_references (CROSS_REPO_OWNERS).
           _BARE_OWNER_NAME_RE = re.compile(
               r"(?<![\w/])([A-Za-z0-9][A-Za-z0-9_-]*)/([A-Za-z0-9._-]+)(?![\w/#])"
           )
@@ -86,19 +90,31 @@ jobs:
               number: int | None
 
 
-          def extract_references(text: str) -> list[Reference]:
+          def fleet_owners() -> frozenset[str]:
+              """Lowercased owners a bare `owner/name` must have to be a candidate; empty means all."""
+              raw = os.environ.get("CROSS_REPO_OWNERS", "")
+              return frozenset(o.strip().lower() for o in raw.split(",") if o.strip())
+
+
+          def extract_references(text: str, bare_owners: frozenset[str] | None = None) -> list[Reference]:
               """Pull every cross-repo reference shape out of `text`, in priority order.
 
               A span already consumed by a higher-priority pattern (owner/name#NNNN,
               then a URL) is removed before the lower-priority patterns run, so the same
-              characters are never reported twice under two shapes.
+              characters are never reported twice under two shapes. A bare `owner/name`
+              counts only when `owner` is in `bare_owners` (default `fleet_owners()`,
+              empty meaning no filter).
               """
+              if bare_owners is None:
+                  bare_owners = fleet_owners()
               text = _DIFF_HEADER_RE.sub("", text)
               references: list[Reference] = []
               consumed: list[tuple[int, int]] = []
 
-              def _take(pattern: re.Pattern[str], build) -> None:
+              def _take(pattern: re.Pattern[str], build, owners: frozenset[str] = frozenset()) -> None:
                   for match in pattern.finditer(text):
+                      if owners and match.group(1).lower() not in owners:
+                          continue
                       span = match.span()
                       if any(span[0] < end and start < span[1] for start, end in consumed):
                           continue
@@ -110,7 +126,7 @@ jobs:
                   lambda m: Reference(m.group(0), m.group(1), m.group(2), int(m.group(3))),
               )
               _take(_URL_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
-              _take(_BARE_OWNER_NAME_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
+              _take(_BARE_OWNER_NAME_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None), bare_owners)
               _take(_BARE_NUMBER_RE, lambda m: Reference(m.group(0), None, None, int(m.group(1))))
 
               return references
@@ -180,8 +196,6 @@ jobs:
 
 
           def main(argv: list[str]) -> int:
-              import os
-
               if len(argv) < 2:
                   print("usage: cross_repo_reference_check.py <text-file> [<text-file> ...]", file=sys.stderr)
                   return 2
@@ -219,4 +233,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          CROSS_REPO_OWNERS: smoochy,smooCorp
         run: python3 /tmp/cross_repo_reference_check.py /tmp/diff.txt /tmp/commits.txt
