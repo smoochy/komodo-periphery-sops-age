@@ -99,7 +99,12 @@ jobs:
               number: int | None
 
 
-          def fleet_owners() -> frozenset[str]:
+          def _repo_name(name: str) -> str:
+              """Drop a clone-URL `.git` suffix; the visibility lookup needs the bare repo name."""
+              return name.removesuffix(".git")
+
+
+          def fleet_owners()-> frozenset[str]:
               """Lowercased owners a bare `owner/name` must have to be a candidate; empty means all."""
               raw = os.environ.get("CROSS_REPO_OWNERS", "")
               return frozenset(o.strip().lower() for o in raw.split(",") if o.strip())
@@ -146,10 +151,14 @@ jobs:
 
               _take(
                   _OWNER_NAME_ISSUE_RE,
-                  lambda m: Reference(m.group(0), m.group(1), m.group(2), int(m.group(3))),
+                  lambda m: Reference(m.group(0), m.group(1), _repo_name(m.group(2)), int(m.group(3))),
               )
-              _take(_URL_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None))
-              _take(_BARE_OWNER_NAME_RE, lambda m: Reference(m.group(0), m.group(1), m.group(2), None), bare_owners)
+              _take(_URL_RE, lambda m: Reference(m.group(0), m.group(1), _repo_name(m.group(2)), None))
+              _take(
+                  _BARE_OWNER_NAME_RE,
+                  lambda m: Reference(m.group(0), m.group(1), _repo_name(m.group(2)), None),
+                  bare_owners,
+              )
               _take(_BARE_NUMBER_RE, lambda m: Reference(m.group(0), None, None, int(m.group(1))), skip=css_hex)
 
               return references
@@ -180,6 +189,12 @@ jobs:
               return None  # transient failure, rate limit, etc. - unresolved, fail closed.
 
 
+          def repo_is_readable(owner: str, name: str, token: str | None) -> bool:
+              """True only when the token can read the repository (200); everything else is False."""
+              status, data = _api_get(f"repos/{owner}/{name}", token)
+              return status == 200 and data is not None
+
+
           def issue_or_pr_exists(repo: str, number: int, token: str | None) -> bool | None:
               """True/False on a real answer, None when the lookup itself failed (fail closed).
 
@@ -202,10 +217,18 @@ jobs:
           def evaluate(text: str, this_repo: str, token: str | None) -> list[Violation]:
               """Return every reference in `text` that must be refused. Empty means clean."""
               violations: list[Violation] = []
+              own_owner, _, own_name = this_repo.partition("/")
+              # A private repository may reference other repositories it can read; a public
+              # one may reference only public ones. Unknown own visibility fails closed
+              # (treated as public).
+              status, data = _api_get(f"repos/{own_owner}/{own_name}", token)
+              own_private = status == 200 and data is not None and data.get("private") is True
               for ref in extract_references(text):
                   if ref.owner is not None and ref.name is not None:
                       public = repo_is_public(ref.owner, ref.name, token)
                       if public is True:
+                          continue
+                      if own_private and public is False and repo_is_readable(ref.owner, ref.name, token):
                           continue
                       reason = "lookup failed" if public is None else "not a public repository"
                       violations.append(Violation(ref.raw, reason))
