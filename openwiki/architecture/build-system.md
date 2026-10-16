@@ -9,7 +9,7 @@ verified:
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
-generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
+generated: { by: "openwiki/0.7.2", at: "2026-10-16T09:35:55.432Z" }
 ---
 
 # Build System
@@ -143,14 +143,12 @@ fi
 # SOPS changed?
 if [ "$CURRENT_SOPS_VERSION" != "$SOPS_VERSION" ]; then
   CHANGED=true
-<!-- openwiki: broken internal link [${SOPS_RELEASE_URL}] file "${SOPS_RELEASE_URL}" does not exist. Fix the href or restore the target, then delete this comment. -->
   reasons+=("SOPS updated: ${CURRENT_SOPS_VERSION:-(none)} -> ${SOPS_VERSION} ([release notes](${SOPS_RELEASE_URL}))")
 fi
 
 # age changed?
 if [ "$CURRENT_AGE_VERSION" != "$AGE_VERSION" ]; then
   CHANGED=true
-<!-- openwiki: broken internal link [${AGE_RELEASE_URL}] file "${AGE_RELEASE_URL}" does not exist. Fix the href or restore the target, then delete this comment. -->
   reasons+=("age updated: ${CURRENT_AGE_VERSION:-(none)} -> ${AGE_VERSION} ([release notes](${AGE_RELEASE_URL}))")
 fi
 ```
