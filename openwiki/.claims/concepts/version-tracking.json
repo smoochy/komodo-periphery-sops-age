@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:438ce61cb84a2145e45245bbd722c57e0dad2e3aa13212f685310763fe88f14e",
+  "pageVersion": "sha256:b54c9a523ce69659f7b6d60ac8d3b0d03d06ce884a2dcb0a26a401946bf9451e",
   "claims": [
     {
       "id": "claim_f1dbec9e8149428193bd1b779a4ffc56",
@@ -76,11 +76,15 @@
     },
     {
       "id": "claim_954463adee56440b8a4ee7096620674e",
-      "statement": "The current base version (CURRENT_BASE_VERSION) is read from OCI labels org.opencontainers.image.base.version or org.opencontainers.image.base.tag of the previously published image, and compared against the freshly resolved BASE_VERSION from the base image's major channel digest.",
+      "statement": "The current base image digest (CURRENT_BASE_DIGEST) is read from OCI label org.opencontainers.image.base.digest of the previously published image, and compared against the freshly resolved BASE_DIGEST to determine upstream changes.",
       "evidence": [
         {
-          "resource": "repo://.github/workflows/build.yml#L127-L129",
-          "version": "repo-lines-v1:sha256:d977f37696d86f11f08c32c5739400fd7fe10cb156b4075ded7b7e71ff1bbe91:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDAyMzkzZDRiNDAxNmI0NmY3ZmI4MWVlYTNjNjIxODMzZWY0ODRjYTc4MWUxNDQ1MDY4NDkwODU2ZDdlYTM0NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjczYmI4Nzc3MjJlNDg0MGFlM2U1ZGM5ODcxNzAwMjA4MzU0ZjQ0ZDg2NDQwNDMzMjc5OTI1ZTgzNjczOTQ5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzAxZTM3ZjFiMmY2NmNlNGE5NTk2ZDRiYjI2MzdiOTI2YzJkYzI0ZWFjNDFkN2JlOTc0NzRkNTAzYWU3NWE0OSJ9"
+          "resource": "repo://.github/workflows/build.yml#L217-L218",
+          "version": "repo-lines-v1:sha256:d66e1d714503f1b7a6603534238e37cb32663b150e499c8217f6505c35de7d26:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzE2MmE2NThlN2Q5YTNlZmVhZDM1NjhkYzUwYTRkYzI2NDg0Yzc1MzZjMTZlMWExMTYwNTIzNjllYTBjOTNlYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjc4YjRiOTE1ZWY3ODM1NzdlYmQzMmIwOTYwNmY2MDgxMTgxNTJmYjliMjllZGIzM2UxNjVjMmJhNmU2M2JiZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjZkYjIwNjllYTAyMWUwZmQzMDVjYjYyM2IzNDkxOWRlYTdiMTBjMGRlODA5NjAzMzA5ZDBlYjBkZWE1ZDVlMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmZmNGZkNWY5MzVkMmY5YmYzNTI1OTFlMWY2ZTRkYWYzZjk1YjZhYmZmYmZmZmI3MDdiYTYyYjkyMTdjY2IzYSJ9"
+        },
+        {
+          "resource": "repo://.github/workflows/build.yml#L277-L280",
+          "version": "repo-lines-v1:sha256:2d71044072cd7cf5e8ca09705f281e14240a96d6ef462b0895e7da5f5e0c4a51:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZmNjBiZjkyZmJjYzI2NjQwZDQ5ZTkwNDAyMzc4NGMyZGM4ZTU3NTMyNTk2N2EzNzQ5MDAyZWJlNmZkMDEzNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmY1NTk3OWNlNzMwMjAzM2U2YjJmZDdkODhmNTM3YTNiOGUwOTFlYTMwNWM4MTFmZmExMjc0YmY1NzY0ZWE1ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjFmM2RmMWM1NTgwY2RiN2Y5NzQyYWM2NGRkNGFkMzM5MWFhYjA2MDAyODZlZjE2N2NlMGE4ZDRkMGNiMzlhYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjM4ZTFlMTU5ZTBlMDllMDMxOGE1N2UyOGI0YjcwNTIxMzA0ZjU0ZDE1ZjlmNGY4NTJjYTFiMjlkMjQzOGUwMiJ9"
         }
       ]
     },
@@ -96,7 +100,7 @@
     }
   ],
   "verification": {
-    "by": "openwiki/0.6.1",
-    "at": "2026-10-02T10:58:29.290Z"
+    "by": "openwiki/0.7.2",
+    "at": "2026-10-30T11:15:48.645Z"
   }
 }

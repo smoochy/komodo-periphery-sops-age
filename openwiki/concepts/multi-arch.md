@@ -3,15 +3,15 @@ type: Concept
 title: Multi-Architecture Building
 description: Document the multi-architecture build strategy supporting linux/amd64 and linux/arm64 platforms. Covers architecture mapping, QEMU emulation, and single manifest list publishing.
 tags: [architecture, multi-arch, docker, buildx, qemu]
-verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
   - id: openwiki-source-bb1ebe868e35e9e500714501
     resource: repo://Dockerfile
 generated: { by: "openwiki/0.6.1", at: "2026-10-02T10:58:29.290Z" }
+verified:
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 # Multi-Architecture Building
 

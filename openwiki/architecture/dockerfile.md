@@ -8,8 +8,8 @@ sources:
     resource: repo://Dockerfile
 generated: { by: "openwiki/0.5.2", at: "2026-09-18T09:31:26.072Z" }
 verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 
 # Dockerfile Reference

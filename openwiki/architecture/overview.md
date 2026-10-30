@@ -10,8 +10,8 @@ sources:
     resource: repo://Dockerfile
 generated: { by: "openwiki/0.5.0", at: "2026-09-04T09:25:18.613Z" }
 verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 
 # Architecture Overview

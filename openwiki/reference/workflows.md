@@ -2,9 +2,6 @@
 type: "Reference"
 title: "Workflows Reference"
 openwiki_generated: true
-verified:
-  - by: openwiki/0.5.2
-    at: 2026-09-18T09:31:26.072Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml

@@ -3,13 +3,13 @@ type: "Concept"
 title: "GHCR Integration"
 description: "Documents GitHub Container Registry publishing and integration for the komodo-periphery-sops-age image, covering registry paths, publishing logic, and mirroring to Docker Hub."
 tags: ["ghcr", "container", "registry", "mirror", "crane"]
-verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
 generated: { by: "openwiki/0.6.1", at: "2026-10-02T10:58:29.290Z" }
+verified:
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 # GHCR Integration
 

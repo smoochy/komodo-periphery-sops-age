@@ -3,13 +3,13 @@ type: "Concept"
 title: "Docker Hub Integration"
 description: "Documents the Docker Hub mirror integration and repository description synchronization workflow for the komodo-periphery-sops-age image, covering registry paths, sync triggers, and keeping the Docker Hub description in sync with README.dockerhub.md."
 tags: ["docker", "hub", "container", "mirror", "synchronization"]
-verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-ef9220e7890ed77ce753b739
     resource: repo://.github/workflows/sync_dockerhub_description.yml
-generated: { by: "openwiki/0.6.1", at: "2026-10-02T10:58:29.290Z" }
+generated: { by: "openwiki/0.7.2", at: "2026-10-30T11:15:48.645Z" }
+verified:
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 # Docker Hub Integration
 
@@ -61,6 +61,7 @@ The description synchronization is handled by the GitHub Actions workflow `.gith
 - The description update step is skipped.
 - The workflow summary notes: "Set `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets to enable it".
 - The description remains unchanged.
+- The workflow triggers on `push` to `main` when `README.md`, `README.dockerhub.md`, or the workflow file itself changes. Any of these changes will trigger a sync.
 
 ## Registry Paths
 
@@ -85,5 +86,5 @@ The `README.dockerhub.md` should not be confused with the main `README.md`; the 
 ## Operational Notes
 
 - The description sync is **independent of image builds** — it only updates the description, not image tags or labels.
-- Changes to `README.md` do not trigger the description sync; only changes to `README.dockerhub.md` (or the workflow file itself) on `main` will trigger a sync.
+- The workflow triggers on `push` to `main` when `README.md`, `README.dockerhub.md`, or the workflow file itself changes. Any of these changes will trigger a sync.
 - The sync only runs when Docker Hub secrets are configured; without them, the step is gracefully skipped.
