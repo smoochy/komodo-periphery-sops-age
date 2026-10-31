@@ -3,9 +3,6 @@ type: Quickstart
 title: Documentation Quickstart
 description: Entry point and task-routing map for the wiki. Routes readers to architecture, concepts, workflows, operations, integrations, and testing pages based on their goal. Provides a 'When to Read What' table for common objectives.
 tags: [quickstart, overview, navigation]
-verified:
-  - by: openwiki/0.7.2
-    at: 2026-10-16T09:35:55.432Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml

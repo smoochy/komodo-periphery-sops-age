@@ -3,9 +3,6 @@ type: Concept
 title: Change Detection Validation
 description: Document the change detection and build skip logic validation. Helps coding agents understand when builds are skipped and the invariants that govern forced vs. natural builds.
 tags: [change-detection, build-validation, ci-cd, version-tracking]
-verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml

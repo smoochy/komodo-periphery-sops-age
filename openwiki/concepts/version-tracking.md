@@ -3,13 +3,13 @@ type: Concept
 title: Version Tracking & Change Detection
 description: Document the version tracking and change detection logic that determines when builds run. Covers base image digest comparison, SOPS/age release comparison, and the decision logic for forced vs. skipped builds.
 tags: [version-tracking, change-detection, ci-cd, build, sops, age]
-verified:
-  - by: openwiki/0.6.1
-    at: 2026-10-02T10:58:29.290Z
 sources:
   - id: openwiki-source-7a80b79a6fb3618cbfab08a2
     resource: repo://.github/workflows/build.yml
-generated: { by: "openwiki/0.7.2", at: "2026-10-16T09:35:55.432Z" }
+generated: { by: "openwiki/0.7.2", at: "2026-10-30T11:15:48.645Z" }
+verified:
+  - by: openwiki/0.7.2
+    at: 2026-10-30T11:15:48.645Z
 ---
 
 # Version Tracking & Change Detection
@@ -73,7 +73,6 @@ else
   echo "do_build=false"
   reasons+=("No upstream changes detected (base/SOPS/age unchanged)")
 fi
-```
 
 ## Change Detection Implementation (build.yml lines 131-155)
 
@@ -101,55 +100,13 @@ The `decide` step performs the following comparisons:
      CHANGED=true
      reasons+=("age updated: ${CURRENT_AGE_VERSION:-(none)} -> ${AGE_VERSION} ([release notes](${AGE_RELEASE_URL}))")
    fi
-   ```
-
-## Simulation Commands
-
-The build system provides a local simulation script that exercises the change detection logic:
-
-```bash
-# Set GH_TOKEN with packages:read scope
-BASE="ghcr.io/moghtech/komodo-periphery:2"
-GH_API="https://api.github.com"
-AUTH_HEADER="Authorization: Bearer ${GH_TOKEN}"
-
-# 1. Resolve base digest
-BASE_DIGEST=$(crane digest "$BASE")
-
-# 2. Resolve periphery tag from OCI labels
-BASE_CFG=$(crane config "$BASE")
-PERIPHERY_TAG_RAW=$(echo "$BASE_CFG" | jq -r '.config.Labels["org.opencontainers.image.version"] // .config.Labels["org.label-schema.version"] // ""')
-PERIPHERY_TAG="${PERIPHERY_TAG_RAW#v}"
-
-# 3. Fetch upstream versions
-SOPS_TAG=$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json" \
-  "${GH_API}/repos/getsops/sops/releases/latest" | jq -r '.tag_name')
-AGE_TAG=$(curl -fsSL -H "$AUTH_HEADER" -H "Accept: application/vnd.github+json" \
-  "${GH_API}/repos/FiloSottile/age/releases/latest" | jq -r '.tag_name')
-SOPS_VERSION=${SOPS_TAG#v}
-AGE_VERSION=${AGE_TAG#v}
-
-# 4. Check current published image
-IMAGE="ghcr.io/smoochy/komodo-periphery-sops-age"
-PERIPHERY_MAJOR_TAG=$(echo "$PERIPHERY_TAG" | cut -d. -f1)
-CURRENT_IMAGE="${IMAGE}:${PERIPHERY_MAJOR_TAG}"
-
-if crane manifest "$CURRENT_IMAGE" >/dev/null 2>&1; then
-  cfg=$(crane config "$CURRENT_IMAGE")
-  CURRENT_BASE_DIGEST=$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.base.digest"] // ""')
-  CURRENT_SOPS_VERSION=$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.sops.version"] // ""')
-  CURRENT_AGE_VERSION=$(echo "$cfg" | jq -r '.config.Labels["org.opencontainers.image.age.version"] // ""')
-fi
-```
+ ```
 
 ## Relationships
 
-<!-- openwiki: broken internal link [architecture/build-system.md] file "architecture/build-system.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- **Depends on** → [Build System](architecture/build-system.md) for the full workflow implementation
-<!-- openwiki: broken internal link [architecture/overview.md] file "architecture/overview.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- **Informed by** → [Architecture Overview](architecture/overview.md) for component design context
-<!-- openwiki: broken internal link [concepts/multi-arch.md] file "concepts/multi-arch.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- **Enables** → [Multi-Architecture Building](concepts/multi-arch.md) by ensuring versions are tracked across platforms
+- **Depends on** → [Build System](../architecture/build-system.md) for the full workflow implementation
+- **Informed by** → [Architecture Overview](../architecture/overview.md) for component design context
+- **Enables** → [Multi-Architecture Building](../concepts/multi-arch.md) by ensuring versions are tracked across platforms
 - **Implemented by** → `.github/workflows/build.yml` for the actual change detection and build decision logic
 
 ## Claims
@@ -179,8 +136,8 @@ fi
   Evidence: `repo://.github/workflows/build.yml#L168`
 
 - **Claim: version-comparison-base**  
-  Statement: The current base version (CURRENT_BASE_VERSION) is read from OCI labels org.opencontainers.image.base.version or org.opencontainers.image.base.tag of the previously published image, and compared against the freshly resolved BASE_VERSION from the base image's major channel digest.  
-  Evidence: `repo://.github/workflows/build.yml#L127`
+  Statement: The current base image digest (CURRENT_BASE_DIGEST) is read from OCI label org.opencontainers.image.base.digest of the previously published image, and compared against the freshly resolved BASE_DIGEST to determine upstream changes.  
+  Evidence: `repo://.github/workflows/build.yml#L217-L218`, `repo://.github/workflows/build.yml#L277-L280`
 
 - **Claim: version-comparison-sops-age**  
   Statement: The current SOPS and age versions are read from their respective OCI labels (org.opencontainers.image.sops.version and org.opencontainers.image.age.version) of the previously published image.  
